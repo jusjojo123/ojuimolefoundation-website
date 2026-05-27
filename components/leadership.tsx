@@ -6,30 +6,35 @@ const leadershipTeam = [
     role: "Founder and Executive Director",
     description: "Leads the overall vision and direction of Ojú Imọlẹ Media Foundation. Oversees media production, storytelling, and cultural documentation, ensuring the foundation remains aligned with its mission of illuminating culture and empowering communities.",
     image: "/images/founder-jolene-smart.jpg",
+    imagePosition: "object-[center_25%]",
   },
   {
     name: "Olumbe Diaz",
     role: "Director of Cultural Affairs and Strategic Development",
     description: "Responsible for cultural preservation, strategic planning, and organizational development. Brings extensive experience in cultural work and supports the foundation in building strong cultural programs and long term growth.",
     image: null,
+    imagePosition: "object-center",
   },
   {
     name: "Keisha Smart Ellis",
     role: "Director of Charity and Community Outreach",
     description: "Leads all humanitarian and charity initiatives. Oversees community outreach programs, support services, and initiatives focused on assisting families, youth, and vulnerable members of the community.",
     image: null,
+    imagePosition: "object-center",
   },
   {
     name: "Afiya Diaz",
     role: "Director of Education, Culture, and Media Support",
     description: "An educator and cultural advocate responsible for educational programs, cultural development initiatives, and supporting media production efforts within the foundation. Plays an active role in storytelling and creative documentation.",
     image: "/images/afiya-diaz.jpg",
+    imagePosition: "object-[center_20%]",
   },
   {
     name: "Yannick Finch",
     role: "Director of Youth Development and Empowerment",
     description: "Responsible for youth engagement, mentorship, empowerment initiatives, and community development programs within the foundation. Supports activities focused on inspiring young people through culture, education, leadership, creativity, media, and positive community involvement while helping to build the next generation of empowered leaders.",
     image: null,
+    imagePosition: "object-center",
   },
 ];
 
@@ -68,7 +73,7 @@ export function Leadership() {
                     alt={member.name}
                     width={192}
                     height={192}
-                    className="w-full h-full object-cover object-top"
+                    className={`w-full h-full object-cover ${member.imagePosition} scale-110`}
                   />
                 ) : (
                   <div className="text-center p-4">

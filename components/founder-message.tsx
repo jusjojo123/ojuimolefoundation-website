@@ -20,13 +20,14 @@ export function FounderMessage() {
           <div className="w-24 h-px bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-12" />
 
           {/* Founder Photo */}
-          <div className="w-40 h-40 lg:w-52 lg:h-52 mx-auto mb-8 rounded-full overflow-hidden border-2 border-gold/40 shadow-lg shadow-gold/10">
+          <div className="w-48 h-48 sm:w-56 sm:h-56 lg:w-64 lg:h-64 mx-auto mb-10 rounded-full overflow-hidden border-4 border-gold/50 shadow-2xl shadow-gold/20">
             <Image
               src="/images/founder-jolene-smart.jpg"
               alt="Jolene Smart, Founder and Executive Director"
-              width={208}
-              height={208}
-              className="w-full h-full object-cover object-top"
+              width={320}
+              height={320}
+              className="w-full h-full object-cover object-[center_25%] scale-110"
+              priority
             />
           </div>
 
