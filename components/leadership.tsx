@@ -13,9 +13,9 @@ const leadershipTeam = [
     name: "Olumbe Diaz",
     role: "Director of Cultural Affairs and Strategic Development",
     description: "Responsible for cultural preservation, strategic planning, and organizational development. Brings extensive experience in cultural work and supports the foundation in building strong cultural programs and long term growth.",
-    image: null,
+    image: "/images/olumbe-diaz.jpg",
     imagePosition: "object-center",
-    isFramed: false,
+    isFramed: true,
   },
   {
     name: "Keisha Smart Ellis",
