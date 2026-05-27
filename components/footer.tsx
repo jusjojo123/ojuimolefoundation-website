@@ -114,7 +114,7 @@ export function Footer() {
               © {currentYear} Ojú Imọlẹ Media Foundation. All rights reserved.
             </p>
             <p className="text-cream/40">
-              Founded in Trinidad and Tobago
+              Founded in 2025 in Trinidad and Tobago
             </p>
           </div>
         </div>

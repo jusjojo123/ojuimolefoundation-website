@@ -4,12 +4,12 @@ const programs = [
   {
     title: "Cultural Preservation",
     description: "Documenting and archiving sacred traditions, oral histories, and cultural practices for future generations.",
-    image: "/images/cultural-preservation.jpg",
+    image: "/images/cultural-event.jpg",
   },
   {
     title: "Humanitarian Outreach",
     description: "Supporting families, youth, and vulnerable community members through charitable initiatives and direct assistance.",
-    image: "/images/community-outreach.jpg",
+    image: "/images/charity-work.jpg",
   },
   {
     title: "Education and Youth Development",
@@ -17,9 +17,9 @@ const programs = [
     image: "/images/youth-education.jpg",
   },
   {
-    title: "Volunteer Program",
-    description: "Engaging community members in meaningful service opportunities that create lasting positive impact.",
-    image: "/images/volunteer-work.jpg",
+    title: "Media and Documentary",
+    description: "Professional media production capturing cultural stories, community voices, and heritage documentation.",
+    image: "/images/media-production.jpg",
   },
 ];
 

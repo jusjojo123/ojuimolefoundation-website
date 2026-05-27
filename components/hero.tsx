@@ -28,7 +28,7 @@ export function Hero() {
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-28 pb-20">
         {/* Logo */}
         <div className="flex justify-center mb-8">
-          <div className="relative w-36 h-36 sm:w-44 sm:h-44 md:w-52 md:h-52 lg:w-60 lg:h-60">
+          <div className="relative w-48 h-48 sm:w-56 sm:h-56 md:w-72 md:h-72 lg:w-80 lg:h-80 xl:w-96 xl:h-96">
             <Image
               src="/images/logo.png"
               alt="Ojú Imọlẹ Media Foundation"
@@ -84,7 +84,7 @@ export function Hero() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
-          <span>Founded in Trinidad and Tobago, West Indies</span>
+          <span>Founded in 2025 in Trinidad and Tobago, West Indies</span>
         </div>
       </div>
 
