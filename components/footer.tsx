@@ -84,7 +84,8 @@ export function Footer() {
               >
                 +1 (868) 254-2540
               </a>
-              <span className="text-cream/50">Trinidad and Tobago, West Indies</span>
+              <span className="text-cream/50">6th Company Village, New Grant</span>
+              <span className="text-cream/50">Trinidad and Tobago</span>
             </div>
           </div>
 
