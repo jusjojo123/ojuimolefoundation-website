@@ -53,7 +53,7 @@ export function About() {
             {/* Stats */}
             <div className="grid grid-cols-3 gap-6 pt-8 border-t border-gold/10 mt-8">
               <div className="text-center">
-                <p className="font-heading text-2xl lg:text-3xl text-gold mb-1">2024</p>
+                <p className="font-heading text-2xl lg:text-3xl text-gold mb-1">2025</p>
                 <p className="text-cream/40 text-xs tracking-wider uppercase">Founded</p>
               </div>
               <div className="text-center">
