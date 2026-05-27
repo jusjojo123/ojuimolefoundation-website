@@ -5,8 +5,9 @@ const leadershipTeam = [
     name: "Jolene Smart",
     role: "Founder and Executive Director",
     description: "Leads the overall vision and direction of Ojú Imọlẹ Media Foundation. Oversees media production, storytelling, and cultural documentation, ensuring the foundation remains aligned with its mission of illuminating culture and empowering communities.",
-    image: "/images/founder-jolene-smart.jpg",
-    imagePosition: "object-[center_25%]",
+    image: "/images/jolene-smart-leadership.jpg",
+    imagePosition: "object-center",
+    isFramed: true,
   },
   {
     name: "Olumbe Diaz",
@@ -14,6 +15,7 @@ const leadershipTeam = [
     description: "Responsible for cultural preservation, strategic planning, and organizational development. Brings extensive experience in cultural work and supports the foundation in building strong cultural programs and long term growth.",
     image: null,
     imagePosition: "object-center",
+    isFramed: false,
   },
   {
     name: "Keisha Smart Ellis",
@@ -21,6 +23,7 @@ const leadershipTeam = [
     description: "Leads all humanitarian and charity initiatives. Oversees community outreach programs, support services, and initiatives focused on assisting families, youth, and vulnerable members of the community.",
     image: null,
     imagePosition: "object-center",
+    isFramed: false,
   },
   {
     name: "Afiya Diaz",
@@ -28,6 +31,7 @@ const leadershipTeam = [
     description: "An educator and cultural advocate responsible for educational programs, cultural development initiatives, and supporting media production efforts within the foundation. Plays an active role in storytelling and creative documentation.",
     image: "/images/afiya-diaz.jpg",
     imagePosition: "object-[center_20%]",
+    isFramed: false,
   },
   {
     name: "Yannick Finch",
@@ -35,6 +39,7 @@ const leadershipTeam = [
     description: "Responsible for youth engagement, mentorship, empowerment initiatives, and community development programs within the foundation. Supports activities focused on inspiring young people through culture, education, leadership, creativity, media, and positive community involvement while helping to build the next generation of empowered leaders.",
     image: null,
     imagePosition: "object-center",
+    isFramed: false,
   },
 ];
 
@@ -66,15 +71,29 @@ export function Leadership() {
               }`}
             >
               {/* Photo */}
-              <div className="w-40 h-40 lg:w-48 lg:h-48 mx-auto mb-6 rounded-full overflow-hidden border-2 border-gold/20 bg-card flex items-center justify-center group-hover:border-gold/40 transition-colors">
+              <div className={`mx-auto mb-6 flex items-center justify-center ${
+                member.isFramed 
+                  ? "w-48 h-48 lg:w-56 lg:h-56" 
+                  : "w-40 h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden border-2 border-gold/20 bg-card group-hover:border-gold/40 transition-colors"
+              }`}>
                 {member.image ? (
-                  <Image
-                    src={member.image}
-                    alt={member.name}
-                    width={192}
-                    height={192}
-                    className={`w-full h-full object-cover ${member.imagePosition} scale-110`}
-                  />
+                  member.isFramed ? (
+                    <Image
+                      src={member.image}
+                      alt={member.name}
+                      width={224}
+                      height={224}
+                      className="w-full h-full object-contain"
+                    />
+                  ) : (
+                    <Image
+                      src={member.image}
+                      alt={member.name}
+                      width={192}
+                      height={192}
+                      className={`w-full h-full object-cover ${member.imagePosition} scale-110`}
+                    />
+                  )
                 ) : (
                   <div className="text-center p-4">
                     <svg className="w-12 h-12 text-gold/30 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
