@@ -49,7 +49,7 @@ export function Hero() {
           Media Foundation
         </p>
         <p className="text-gold/70 text-sm md:text-base tracking-widest italic mb-12">
-          The Eye of Light
+          Eye of Light
         </p>
 
         {/* Main Slogan */}

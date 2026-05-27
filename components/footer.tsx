@@ -45,7 +45,7 @@ export function Footer() {
               </div>
             </Link>
             <p className="text-cream/50 text-sm leading-relaxed mb-4">
-              The Eye of Light. Preserving cultural heritage and sacred traditions through media excellence.
+              Eye of Light. Preserving cultural heritage and sacred traditions through media excellence.
             </p>
             <p className="text-gold/60 text-sm italic">
               Honoring Our Past, Inspiring Our Future
