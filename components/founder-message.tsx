@@ -19,14 +19,15 @@ export function FounderMessage() {
           </h2>
           <div className="w-24 h-px bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-12" />
 
-          {/* Photo Placeholder */}
-          <div className="w-32 h-32 lg:w-40 lg:h-40 mx-auto mb-8 rounded-full overflow-hidden border-2 border-gold/30 bg-card flex items-center justify-center">
-            <div className="text-center">
-              <svg className="w-12 h-12 text-gold/30 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-              <p className="text-cream/30 text-[10px] tracking-wider">Leadership Photo<br />To Be Added</p>
-            </div>
+          {/* Founder Photo */}
+          <div className="w-40 h-40 lg:w-52 lg:h-52 mx-auto mb-8 rounded-full overflow-hidden border-2 border-gold/40 shadow-lg shadow-gold/10">
+            <Image
+              src="/images/founder-jolene-smart.jpg"
+              alt="Jolene Smart, Founder and Executive Director"
+              width={208}
+              height={208}
+              className="w-full h-full object-cover object-top"
+            />
           </div>
 
           {/* Quote */}
