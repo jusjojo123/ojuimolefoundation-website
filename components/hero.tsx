@@ -7,63 +7,92 @@ export function Hero() {
       {/* Background Image */}
       <div className="absolute inset-0">
         <Image
-          src="/images/sacred-flames.jpg"
-          alt="Sacred terracotta bowls with warm flames in circular formation"
+          src="/images/hero-sacred-flames.jpg"
+          alt="Sacred terracotta bowls with palm oil flames and Ifá ikins in circular formation"
           fill
           className="object-cover"
           priority
+          quality={90}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/50 to-background" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-transparent to-background/60" />
+        {/* Cinematic Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/30 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background/50 via-transparent to-background/50" />
+      </div>
+
+      {/* Subtle Gold Ambient Glow */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gold/5 rounded-full blur-[120px]" />
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-24">
-        <div className="mb-6">
-          <span className="text-gold text-sm md:text-base tracking-[0.3em] uppercase">
-            Eye of Light
-          </span>
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-28 pb-20">
+        {/* Logo */}
+        <div className="flex justify-center mb-8">
+          <div className="relative w-36 h-36 sm:w-44 sm:h-44 md:w-52 md:h-52 lg:w-60 lg:h-60">
+            <Image
+              src="/images/logo.png"
+              alt="Ojú Imọlẹ Media Foundation"
+              fill
+              className="object-contain drop-shadow-[0_0_40px_rgba(201,162,39,0.3)]"
+              priority
+            />
+          </div>
         </div>
 
-        <h1 className="font-heading text-4xl sm:text-5xl md:text-7xl lg:text-8xl text-cream mb-6 tracking-wide text-balance">
-          Ojú Imọlẹ
-          <span className="block text-gold">Media Foundation</span>
+        {/* Foundation Name */}
+        <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-cream tracking-wider mb-3">
+          <span className="bg-gradient-to-r from-gold via-gold-light to-gold bg-clip-text text-transparent">
+            Ojú Imọlẹ
+          </span>
         </h1>
-
-        <p className="text-cream/80 text-lg sm:text-xl md:text-2xl max-w-3xl mx-auto mb-10 leading-relaxed text-pretty">
-          Preserving cultural heritage, documenting sacred traditions, and
-          empowering communities through media, education, and cultural
-          preservation.
+        <p className="text-cream/50 text-xs sm:text-sm md:text-base tracking-[0.35em] uppercase mb-2">
+          Media Foundation
+        </p>
+        <p className="text-gold/70 text-sm md:text-base tracking-widest italic mb-12">
+          The Eye of Light
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        {/* Main Slogan */}
+        <h2 className="font-heading text-xl sm:text-2xl md:text-3xl lg:text-4xl text-cream mb-4 tracking-wide text-balance leading-relaxed">
+          Honoring Our Past, Inspiring Our Future
+        </h2>
+
+        {/* Secondary Slogan */}
+        <p className="text-cream/60 text-base sm:text-lg md:text-xl tracking-wide mb-14 text-pretty">
+          Rooted in Vision, Rising in Purpose
+        </p>
+
+        {/* CTA Buttons */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
           <Link
             href="#about"
-            className="bg-gradient-to-r from-gold to-bronze text-background px-8 py-4 rounded-md font-semibold text-lg hover:opacity-90 transition-opacity tracking-wide"
+            className="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-gold to-amber text-background font-heading text-sm tracking-[0.2em] uppercase hover:shadow-[0_0_30px_rgba(201,162,39,0.4)] transition-all duration-300 rounded"
           >
             Discover Our Mission
           </Link>
           <Link
             href="#donate"
-            className="border-2 border-gold text-gold px-8 py-4 rounded-md font-semibold text-lg hover:bg-gold/10 transition-colors tracking-wide"
+            className="w-full sm:w-auto px-10 py-4 border border-gold/40 text-gold font-heading text-sm tracking-[0.2em] uppercase hover:bg-gold/10 hover:border-gold/70 transition-all duration-300 rounded"
           >
             Support Our Work
           </Link>
         </div>
 
         {/* Location Badge */}
-        <div className="mt-16">
-          <span className="text-cream/60 text-sm tracking-widest uppercase">
-            Based in Trinidad and Tobago, West Indies
-          </span>
+        <div className="mt-20 inline-flex items-center gap-3 text-cream/40 text-sm tracking-wider">
+          <svg className="w-4 h-4 text-gold/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          <span>Founded in Trinidad and Tobago, West Indies</span>
         </div>
       </div>
 
       {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-        <div className="w-6 h-10 border-2 border-gold/50 rounded-full flex items-start justify-center p-2">
-          <div className="w-1.5 h-3 bg-gold rounded-full" />
-        </div>
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+        <svg className="w-5 h-5 text-gold/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+        </svg>
       </div>
     </section>
   );

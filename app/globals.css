@@ -3,21 +3,23 @@
 @theme inline {
   --color-background: #0a0908;
   --color-foreground: #f5f0e8;
-  --color-card: #1a1814;
+  --color-card: #12100e;
   --color-card-foreground: #f5f0e8;
   --color-primary: #c9a227;
   --color-primary-foreground: #0a0908;
   --color-secondary: #8b6914;
   --color-secondary-foreground: #f5f0e8;
-  --color-muted: #2a2520;
+  --color-muted: #1a1714;
   --color-muted-foreground: #a89f91;
   --color-accent: #cd7f32;
   --color-accent-foreground: #0a0908;
-  --color-border: #3d3629;
+  --color-border: #2d261f;
   --color-cream: #f5f0e8;
   --color-gold: #c9a227;
+  --color-gold-light: #dbb94a;
   --color-bronze: #cd7f32;
   --color-earth: #5c4a32;
+  --color-amber: #b8860b;
 
   --font-sans: "Cormorant Garamond", serif;
   --font-heading: "Cinzel", serif;
@@ -51,14 +53,31 @@
   .text-pretty {
     text-wrap: pretty;
   }
+
+  .gold-gradient {
+    background: linear-gradient(135deg, #c9a227 0%, #dbb94a 50%, #c9a227 100%);
+  }
+
+  .gold-text-gradient {
+    background: linear-gradient(135deg, #c9a227 0%, #dbb94a 50%, #c9a227 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .cinematic-overlay {
+    background: linear-gradient(180deg, rgba(10,9,8,0.7) 0%, rgba(10,9,8,0.3) 30%, rgba(10,9,8,0.3) 70%, rgba(10,9,8,0.9) 100%);
+  }
+
+  .glow-gold {
+    box-shadow: 0 0 40px rgba(201, 162, 39, 0.3);
+  }
 }
 
-/* Smooth scrolling */
 html {
   scroll-behavior: smooth;
 }
 
-/* Custom scrollbar for dark theme */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -74,4 +93,35 @@ html {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-gold);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(201, 162, 39, 0.2), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite;
 }
