@@ -5,6 +5,7 @@ import { Mission } from "@/components/mission";
 import { FounderMessage } from "@/components/founder-message";
 import { Leadership } from "@/components/leadership";
 import { Programs } from "@/components/programs";
+import { HonoringElders } from "@/components/honoring-elders";
 import { Media } from "@/components/media";
 import { Gallery } from "@/components/gallery";
 import { FutureVision } from "@/components/future-vision";
@@ -22,6 +23,7 @@ export default function Home() {
       <FounderMessage />
       <Leadership />
       <Programs />
+      <HonoringElders />
       <Media />
       <Gallery />
       <FutureVision />
