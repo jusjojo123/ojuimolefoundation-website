@@ -1,28 +1,35 @@
+import Image from "next/image";
+
 const leadershipTeam = [
   {
     name: "Jolene Smart",
     role: "Founder and Executive Director",
     description: "Leads the overall vision and direction of Ojú Imọlẹ Media Foundation. Oversees media production, storytelling, and cultural documentation, ensuring the foundation remains aligned with its mission of illuminating culture and empowering communities.",
+    image: "/images/founder-jolene-smart.jpg",
   },
   {
     name: "Olumbe Diaz",
     role: "Director of Cultural Affairs and Strategic Development",
     description: "Responsible for cultural preservation, strategic planning, and organizational development. Brings extensive experience in cultural work and supports the foundation in building strong cultural programs and long term growth.",
+    image: null,
   },
   {
     name: "Keisha Smart Ellis",
     role: "Director of Charity and Community Outreach",
     description: "Leads all humanitarian and charity initiatives. Oversees community outreach programs, support services, and initiatives focused on assisting families, youth, and vulnerable members of the community.",
+    image: null,
   },
   {
     name: "Afiya Diaz",
     role: "Director of Education, Culture, and Media Support",
     description: "An educator and cultural advocate responsible for educational programs, cultural development initiatives, and supporting media production efforts within the foundation. Plays an active role in storytelling and creative documentation.",
+    image: "/images/afiya-diaz.jpg",
   },
   {
     name: "Yannick Finch",
     role: "Director of Youth Development and Empowerment",
     description: "Responsible for youth engagement, mentorship, empowerment initiatives, and community development programs within the foundation. Supports activities focused on inspiring young people through culture, education, leadership, creativity, media, and positive community involvement while helping to build the next generation of empowered leaders.",
+    image: null,
   },
 ];
 
@@ -53,14 +60,24 @@ export function Leadership() {
                 index === 0 ? "md:col-span-2 lg:col-span-1" : ""
               }`}
             >
-              {/* Photo Placeholder */}
-              <div className="w-24 h-24 mx-auto mb-6 rounded-full overflow-hidden border border-gold/20 bg-card flex items-center justify-center group-hover:border-gold/40 transition-colors">
-                <div className="text-center">
-                  <svg className="w-8 h-8 text-gold/30 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
-                  <p className="text-cream/30 text-[8px] tracking-wider">Photo To<br />Be Added</p>
-                </div>
+              {/* Photo */}
+              <div className="w-40 h-40 lg:w-48 lg:h-48 mx-auto mb-6 rounded-full overflow-hidden border-2 border-gold/20 bg-card flex items-center justify-center group-hover:border-gold/40 transition-colors">
+                {member.image ? (
+                  <Image
+                    src={member.image}
+                    alt={member.name}
+                    width={192}
+                    height={192}
+                    className="w-full h-full object-cover object-top"
+                  />
+                ) : (
+                  <div className="text-center p-4">
+                    <svg className="w-12 h-12 text-gold/30 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    <p className="text-cream/40 text-xs tracking-wider">Leadership Photo<br />To Be Added</p>
+                  </div>
+                )}
               </div>
 
               {/* Info */}
