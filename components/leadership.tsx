@@ -22,8 +22,8 @@ const leadershipTeam = [
     role: "Director of Charity and Community Outreach",
     description: "Leads all humanitarian and charity initiatives. Oversees community outreach programs, support services, and initiatives focused on assisting families, youth, and vulnerable members of the community.",
     image: "/images/keisha-smart-ellis.jpg",
-    imagePosition: "object-[center_30%]",
-    isFramed: false,
+    imagePosition: "object-center",
+    isFramed: true,
   },
   {
     name: "Afiya Diaz",
