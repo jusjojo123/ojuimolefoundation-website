@@ -2,6 +2,11 @@ import Image from "next/image";
 
 const elderFeatures = [
   {
+    title: "Community Wisdom Gathering",
+    description: "Elders and community members united in traditional ceremony",
+    image: "/images/elders-community.jpg",
+  },
+  {
     title: "Elder Interview Coming Soon",
     description: "Documenting wisdom from community elders",
     image: "/images/elder-interview.jpg",
