@@ -49,8 +49,8 @@ export function SpiritualHeritage() {
           <div className="order-1 lg:order-2">
             <div className="relative aspect-[4/3] rounded-lg overflow-hidden border border-gold/20">
               <Image
-                src="/images/spiritual-heritage.jpg"
-                alt="Sacred Ifá divination items"
+                src="/images/ifa-divination-items.jpg"
+                alt="Sacred Ifá divination items including ikin palm nuts and ceremonial objects"
                 fill
                 className="object-cover"
               />
@@ -64,8 +64,8 @@ export function SpiritualHeritage() {
           <div>
             <div className="relative aspect-[4/3] rounded-lg overflow-hidden border border-gold/20">
               <Image
-                src="/images/cultural-event.jpg"
-                alt="Isese cultural celebration"
+                src="/images/obatala-sacred-items.jpg"
+                alt="Sacred Obatala items including white eleke beads, ceremonial vessels, and sacred objects"
                 fill
                 className="object-cover"
               />
