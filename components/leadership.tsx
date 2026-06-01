@@ -37,8 +37,8 @@ const leadershipTeam = [
     name: "Yannick Finch",
     role: "Director of Youth Development and Empowerment",
     description: "Responsible for youth engagement, mentorship, empowerment initiatives, and community development programs within the foundation. Supports activities focused on inspiring young people through culture, education, leadership, creativity, media, and positive community involvement while helping to build the next generation of empowered leaders.",
-    image: null,
-    imagePosition: "object-center",
+    image: "/images/yannick-finch.jpg",
+    imagePosition: "object-[center_15%]",
     isFramed: false,
   },
 ];
