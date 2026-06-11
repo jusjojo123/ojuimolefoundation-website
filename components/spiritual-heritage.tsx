@@ -109,9 +109,9 @@ export function SpiritualHeritage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               {
-                title: "Ìwà Pẹ̀lẹ́",
+                title: "Ìwà Rere",
                 subtitle: "Good Character",
-                description: "The foundation of Ifá philosophy, emphasizing the development of moral excellence and ethical conduct in all aspects of life.",
+                description: "Ìwà Rere means \"good character\" and is one of the most important principles in Yorùbá tradition. It refers to living with honesty, integrity, kindness, humility, respect, patience, and moral discipline. It teaches that true success and blessings come not only from knowledge or spiritual practice, but from cultivating good character and treating others with dignity and respect.",
               },
               {
                 title: "Orí",
