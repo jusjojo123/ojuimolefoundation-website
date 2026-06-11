@@ -47,7 +47,7 @@ export function About() {
               Our name, meaning &ldquo;Eye of Light&rdquo; in the Yoruba language, embodies our commitment to illuminating culture, preserving sacred knowledge, and shining light on untold stories that deserve to be shared with the world.
             </p>
             <p className="text-cream/70 text-base lg:text-lg leading-relaxed">
-              The foundation welcomes people of all backgrounds who genuinely support cultural awareness, education, humanitarian development, and the preservation of sacred traditions and community history.
+              The foundation welcomes people of all backgrounds who genuinely support cultural awareness, education, humanitarian development, and the preservation of sacred traditions and community history globally.
             </p>
 
             {/* Stats */}

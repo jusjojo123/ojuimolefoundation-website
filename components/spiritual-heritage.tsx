@@ -36,13 +36,13 @@ export function SpiritualHeritage() {
                 on ethics, morality, history, and the nature of existence.
               </p>
               <p>
-                At its core, Ifá teaches the importance of developing good character (ìwà pẹ̀lẹ́), living in harmony 
+                At its core, Ifá teaches the importance of developing good character (ìwà rere), living in harmony 
                 with nature, honoring ancestors, and maintaining balance between the spiritual and physical worlds. 
                 The tradition emphasizes personal responsibility, community welfare, and the pursuit of wisdom.
               </p>
               <p>
                 Through Ifá, practitioners seek guidance from Ọ̀rúnmìlà, the deity of wisdom and divination, 
-                to navigate life&apos;s challenges and fulfill their destiny (orí).
+                to navigate life&apos;s challenges by aligning with their inner consciousness (orí) to fulfill their destiny (àyànmọ́).
               </p>
             </div>
           </div>
@@ -79,18 +79,18 @@ export function SpiritualHeritage() {
             </h3>
             <div className="space-y-4 text-cream/70 leading-relaxed">
               <p>
-                Isese (meaning &quot;the source&quot; or &quot;the original way&quot;) refers to the traditional religious and cultural 
-                practices of the Yorùbá people. It encompasses worship of the Òrìṣà (deities), veneration of ancestors, 
-                and adherence to ancient customs that have been passed down through generations.
+                Isese (meaning &quot;the source&quot; or &quot;the original way&quot;) refers to the traditional and cultural 
+                practices of the Isese community. It encompasses the study, practice, and wisdom of Ifá, alignment with the Òrìṣà (deities), 
+                veneration of ancestors, and adherence to ancient customs that have been passed down through generations.
               </p>
               <p>
                 In Trinidad and Tobago and throughout the Caribbean diaspora, Isese traditions have been preserved 
-                and adapted, creating vibrant communities that maintain connections to their African spiritual roots 
+                and adapted, creating vibrant communities that maintain connections to their African ancestral roots 
                 while developing unique expressions of the tradition.
               </p>
               <p>
-                Isese practitioners gather for ceremonies, festivals, and community celebrations that honor the Òrìṣà, 
-                celebrate life passages, and strengthen community bonds through shared spiritual practice.
+                Isese practitioners gather for ceremonies, festivals, educational programs, and community celebrations that honor ancestral traditions, 
+                celebrate life passages, strengthen community bonds, and preserve sacred cultural knowledge through shared spiritual and cultural practices.
               </p>
             </div>
           </div>
@@ -106,7 +106,7 @@ export function SpiritualHeritage() {
             <div className="w-16 h-px bg-gold/30 mx-auto" />
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               {
                 title: "Ìwà Pẹ̀lẹ́",
@@ -115,8 +115,13 @@ export function SpiritualHeritage() {
               },
               {
                 title: "Orí",
-                subtitle: "Personal Destiny",
-                description: "Each person carries a unique destiny chosen before birth. Through wisdom and good choices, one can fulfill their highest potential.",
+                subtitle: "Inner Consciousness & Spiritual Essence",
+                description: "Each person carries a sacred inner consciousness that guides their journey through life. Through wisdom, self awareness, and right character, one aligns with their Orí to walk in purpose, fulfill destiny, and live in harmony with their highest potential.",
+              },
+              {
+                title: "Àyànmọ́",
+                subtitle: "Destiny",
+                description: "In Yorùbá tradition, destiny is understood as the sacred path and purpose a person chooses before coming into the world. It represents the journey, lessons, experiences, and responsibilities connected to one's life. Through wisdom, right character, self awareness, and alignment with one's inner consciousness (Orí), a person moves closer toward fulfilling their destiny and living in harmony with their highest purpose and potential.",
               },
               {
                 title: "Àṣẹ",
@@ -124,7 +129,7 @@ export function SpiritualHeritage() {
                 description: "The life force and authority that flows through all creation, empowering words, actions, and intentions with spiritual efficacy.",
               },
               {
-                title: "Ẹbọ",
+                title: "Ẹbọ Riru",
                 subtitle: "Sacrifice and Offering",
                 description: "The practice of making offerings to maintain balance, show gratitude, and strengthen relationships with spiritual forces.",
               },
