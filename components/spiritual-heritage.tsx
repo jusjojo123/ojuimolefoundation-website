@@ -131,7 +131,7 @@ export function SpiritualHeritage() {
               {
                 title: "Ẹbọ Riru",
                 subtitle: "Sacrifice and Offering",
-                description: "The practice of making offerings to maintain balance, show gratitude, and strengthen relationships with spiritual forces.",
+                description: "A traditional spiritual practice of making prescribed offerings to promote balance, gratitude, harmony, and positive transformation in one's life and community.",
               },
             ].map((teaching, i) => (
               <div
