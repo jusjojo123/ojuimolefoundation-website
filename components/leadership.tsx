@@ -26,7 +26,7 @@ const leadershipTeam = [
     isFramed: true,
   },
   {
-    name: "Afiya Diaz",
+    name: "Ọmọlẹ̀yẹ Afiya Diaz",
     role: "Director of Education, Culture, and Media Support",
     description: "An educator and cultural advocate responsible for educational programs, cultural development initiatives, and supporting media production efforts within the foundation. Plays an active role in storytelling and creative documentation.",
     image: "/images/afiya-diaz.jpg",
