@@ -23,7 +23,7 @@ export function FounderMessage() {
           <div className="w-56 h-56 sm:w-64 sm:h-64 lg:w-80 lg:h-80 mx-auto mb-10 relative">
             <Image
               src="/images/founder-jolene-smart-framed.jpg"
-              alt="Jolene Smart, Founder and Executive Director"
+              alt="Ifagbejami Jolene Smart, Founder and Executive Director"
               width={400}
               height={400}
               className="w-full h-full object-contain"
@@ -46,7 +46,7 @@ export function FounderMessage() {
 
           {/* Founder Info */}
           <div className="border-t border-gold/10 pt-6 inline-block">
-            <p className="font-heading text-xl text-gold tracking-wide">Jolene Smart</p>
+            <p className="font-heading text-xl text-gold tracking-wide">Ifagbejami Jolene Smart</p>
             <p className="text-cream/50 text-sm tracking-wider">Founder and Executive Director</p>
           </div>
         </div>
