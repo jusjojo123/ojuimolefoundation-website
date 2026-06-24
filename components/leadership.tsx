@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const leadershipTeam = [
   {
-    name: "Jolene Smart",
+    name: "Ifagbejami Jolene Smart",
     role: "Founder and Executive Director",
     description: "Leads the overall vision and direction of Ojú Imọlẹ Media Foundation. Oversees media production, storytelling, and cultural documentation, ensuring the foundation remains aligned with its mission of illuminating culture and empowering communities.",
     image: "/images/jolene-smart-leadership.jpg",
