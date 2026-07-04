@@ -64,16 +64,44 @@ export function Contact() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    setSubmitted(true);
-    setIsSubmitting(false);
+    setError("");
+
+    try {
+      const response = await fetch("https://formspree.io/f/xjgqjnln", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          name: `${formData.firstName} ${formData.lastName}`.trim(),
+          email: formData.email,
+          phone: formData.phone,
+          subject: formData.reason,
+          message: formData.message,
+          _subject: `New contact form submission: ${formData.reason || "General Inquiry"}`,
+        }),
+      });
+
+      if (response.ok) {
+        setSubmitted(true);
+      } else {
+        const data = await response.json().catch(() => null);
+        const message =
+          data?.errors?.map((err: { message: string }) => err.message).join(", ") ||
+          "Something went wrong. Please try again or email us directly.";
+        setError(message);
+      }
+    } catch {
+      setError("Unable to send your message right now. Please try again or email us directly.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -119,7 +147,7 @@ export function Contact() {
                 </div>
                 <h4 className="font-heading text-xl text-cream mb-3">Thank You!</h4>
                 <p className="text-cream/60">
-                  Your message has been received. We will be in touch soon.
+                  Thank you for contacting Ojú Imọlẹ Media Foundation. Your message has been received.
                 </p>
               </div>
             ) : (
@@ -230,6 +258,13 @@ export function Contact() {
                     placeholder="Tell us how we can help you..."
                   />
                 </div>
+
+                {/* Error Message */}
+                {error && (
+                  <p className="text-sm text-red-400" role="alert">
+                    {error}
+                  </p>
+                )}
 
                 {/* Submit Button */}
                 <button
