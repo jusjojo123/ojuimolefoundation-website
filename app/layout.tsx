@@ -15,7 +15,10 @@ const cormorant = Cormorant_Garamond({
   display: "swap",
 });
 
+const siteUrl = "https://www.ojuimolefoundation.org";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "Ojú Imọlẹ Media Foundation | Eye of Light",
   description:
     "Ojú Imọlẹ Media Foundation preserves cultural heritage, documents sacred traditions, empowers communities, and inspires future generations through media, education, and cultural preservation. Based in Trinidad and Tobago, West Indies.",
@@ -29,12 +32,38 @@ export const metadata: Metadata = {
     "cultural preservation",
   ],
   authors: [{ name: "Ojú Imọlẹ Media Foundation" }],
+  creator: "Ojú Imọlẹ Media Foundation",
+  publisher: "Ojú Imọlẹ Media Foundation",
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "Ojú Imọlẹ Media Foundation | Eye of Light",
     description:
       "Preserving cultural heritage and sacred traditions through media, education, and cultural preservation.",
+    url: siteUrl,
+    siteName: "Ojú Imọlẹ Media Foundation",
     type: "website",
     locale: "en_TT",
+    images: [
+      {
+        url: "/images/hero-sacred-flames.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Ojú Imọlẹ Media Foundation | Eye of Light",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Ojú Imọlẹ Media Foundation | Eye of Light",
+    description:
+      "Preserving cultural heritage and sacred traditions through media, education, and cultural preservation.",
+    images: ["/images/hero-sacred-flames.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
