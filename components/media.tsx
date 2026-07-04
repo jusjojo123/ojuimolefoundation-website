@@ -91,8 +91,8 @@ export function Media() {
                 </div>
                 <div className="p-6">
                   <span className="text-gold/60 text-xs tracking-wider uppercase">Coming Soon</span>
-                  <h4 className="text-cream font-medium mt-2 mb-2">Article Title Placeholder</h4>
-                  <p className="text-cream/50 text-sm">Article content and stories will be featured here.</p>
+                  <h4 className="text-cream font-medium mt-2 mb-2">New Article Coming Soon</h4>
+                  <p className="text-cream/50 text-sm">Stories, updates, and news from our community will be featured here.</p>
                 </div>
               </div>
             ))}
