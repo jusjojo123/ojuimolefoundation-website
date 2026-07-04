@@ -3,20 +3,9 @@
 import { db } from "@/lib/db"
 import { contentItems } from "@/lib/db/schema"
 import { requireUserId } from "@/lib/auth-helpers"
-import { and, asc, desc, eq } from "drizzle-orm"
+import { asc, desc, eq } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
-
-export const CONTENT_TYPES = [
-  "article",
-  "interview",
-  "gallery",
-  "video",
-  "event",
-  "announcement",
-  "project",
-] as const
-
-export type ContentType = (typeof CONTENT_TYPES)[number]
+import type { ContentType } from "@/lib/content-types"
 
 function parseFormValues(formData: FormData) {
   const type = String(formData.get("type") || "").trim()

@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation"
 import { getSession } from "@/lib/auth-helpers"
-import { getConfig } from "@/lib/content-types"
-import { getAllContent, type ContentType } from "@/app/actions/content"
+import { getConfig, type ContentType } from "@/lib/content-types"
+import { getAllContent } from "@/app/actions/content"
 import { ContentList } from "@/components/admin/content-list"
 
 export default async function AdminTypeListPage({

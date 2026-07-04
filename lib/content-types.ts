@@ -1,4 +1,14 @@
-import type { ContentType } from "@/app/actions/content"
+export const CONTENT_TYPES = [
+  "article",
+  "interview",
+  "gallery",
+  "video",
+  "event",
+  "announcement",
+  "project",
+] as const
+
+export type ContentType = (typeof CONTENT_TYPES)[number]
 
 export type FieldKey =
   | "description"

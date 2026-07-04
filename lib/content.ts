@@ -3,7 +3,7 @@ import "server-only"
 import { db } from "@/lib/db"
 import { contentItems, type ContentItem } from "@/lib/db/schema"
 import { and, asc, desc, eq } from "drizzle-orm"
-import type { ContentType } from "@/app/actions/content"
+import type { ContentType } from "@/lib/content-types"
 
 /**
  * Public fetch: only published items of a given type, ordered for display.
