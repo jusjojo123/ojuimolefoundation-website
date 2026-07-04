@@ -19,14 +19,14 @@ export function FounderMessage() {
           </h2>
           <div className="w-24 h-px bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-12" />
 
-          {/* Founder Photo - Circular frame with gold border */}
-          <div className="w-56 h-56 sm:w-64 sm:h-64 lg:w-80 lg:h-80 mx-auto mb-10 relative rounded-full overflow-hidden border-4 border-gold shadow-[0_0_40px_rgba(212,175,55,0.25)]">
+          {/* Founder Photo - Square frame with gold border, full head wrap visible */}
+          <div className="w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 mx-auto mb-10 relative rounded-2xl overflow-hidden border-4 border-gold shadow-[0_0_40px_rgba(212,175,55,0.25)]">
             <Image
               src="/images/founder-jolene-smart-new.jpg"
               alt="Ifagbejami Jolene Smart, Founder and Executive Director"
-              width={400}
-              height={400}
-              className="w-full h-full object-cover object-[50%_28%]"
+              width={600}
+              height={600}
+              className="w-full h-full object-cover object-[50%_15%]"
               priority
             />
           </div>
