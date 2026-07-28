@@ -25,17 +25,22 @@ export function MediaUploader({ accept, onUploaded, label }: Props) {
     setError(null)
     setUploading(true)
 
-    const fd = new FormData()
-    fd.append("file", file)
-    const res = await uploadFile(fd)
-
-    setUploading(false)
-    if (inputRef.current) inputRef.current.value = ""
-    if ("error" in res && res.error) {
-      setError(res.error)
-      return
+    try {
+      const fd = new FormData()
+      fd.append("file", file)
+      const res = await uploadFile(fd)
+      if ("error" in res && res.error) {
+        setError(res.error)
+      } else if (res.url) {
+        onUploaded(res.url)
+      }
+    } catch (err) {
+      console.log("[v0] upload client error:", err)
+      setError("Upload failed. Please try again.")
+    } finally {
+      setUploading(false)
+      if (inputRef.current) inputRef.current.value = ""
     }
-    if (res.url) onUploaded(res.url)
   }
 
   return (

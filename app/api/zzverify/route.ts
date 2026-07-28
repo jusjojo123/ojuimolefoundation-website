@@ -22,6 +22,26 @@ export async function POST() {
   }
 }
 
+export async function GET() {
+  const { put } = await import("@vercel/blob")
+  let blobResult: unknown = null
+  try {
+    const b = await put(`cms/verify/${Date.now()}.txt`, "hello", {
+      access: "public",
+      addRandomSuffix: true,
+    })
+    blobResult = { ok: true, url: b.url }
+  } catch (err) {
+    blobResult = { ok: false, error: String(err) }
+  }
+  return NextResponse.json({
+    nodeEnv: process.env.NODE_ENV,
+    hasBlobToken: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
+    v0RuntimeUrl: process.env.V0_RUNTIME_URL ?? null,
+    blobResult,
+  })
+}
+
 export async function DELETE() {
   await db.delete(userTable).where(eq(userTable.email, TEST_EMAIL))
   return NextResponse.json({ ok: true })

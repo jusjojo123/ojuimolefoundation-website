@@ -32,6 +32,21 @@ export const auth = betterAuth({
     ...(process.env.VERCEL_PROJECT_PRODUCTION_URL
       ? [`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`]
       : []),
+    // Dev/preview-only: the v0 preview and browser-automation sandboxes hit
+    // rotating origins (localhost, *.vusercontent.net, *.vercel.run) that are
+    // not otherwise in the allow-list. These wildcard patterns are ONLY added
+    // in development so production keeps a strict, explicit allow-list.
+    ...(process.env.NODE_ENV === "development"
+      ? [
+          "http://localhost:3000",
+          "http://localhost:3001",
+          "http://127.0.0.1:3000",
+          "http://127.0.0.1:3001",
+          "https://*.vusercontent.net",
+          "https://*.vercel.run",
+          "https://*.v0.dev",
+        ]
+      : []),
     "https://www.ojuimolefoundation.org",
     "https://ojuimolefoundation.org",
   ],
