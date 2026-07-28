@@ -17,7 +17,7 @@ export function SpiritualHeritage() {
           </h2>
           <div className="w-24 h-px bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-8" />
           <p className="text-cream/70 text-lg max-w-3xl mx-auto leading-relaxed">
-            Ojú Imọlẹ Media Foundation honors and documents the sacred traditions of Ifá and Isese, 
+            Ojú Imọ̀lẹ̀ Media Foundation honors and documents the sacred traditions of Ifá and Isese, 
             preserving ancestral wisdom for future generations through education, media, and community engagement.
           </p>
         </div>

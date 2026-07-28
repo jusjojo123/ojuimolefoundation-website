@@ -19,11 +19,11 @@ const siteUrl = "https://www.ojuimolefoundation.org";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Ojú Imọlẹ Media Foundation | Eye of Light",
+  title: "Ojú Imọ̀lẹ̀ Media Foundation | Eye of Light",
   description:
-    "Ojú Imọlẹ Media Foundation preserves cultural heritage, documents sacred traditions, empowers communities, and inspires future generations through media, education, and cultural preservation. Based in Trinidad and Tobago, West Indies.",
+    "Ojú Imọ̀lẹ̀ Media Foundation preserves cultural heritage, documents sacred traditions, empowers communities, and inspires future generations through media, education, and cultural preservation. Based in Trinidad and Tobago, West Indies.",
   keywords: [
-    "Ojú Imọlẹ",
+    "Ojú Imọ̀lẹ̀",
     "Eye of Light",
     "cultural heritage",
     "media foundation",
@@ -31,18 +31,18 @@ export const metadata: Metadata = {
     "sacred traditions",
     "cultural preservation",
   ],
-  authors: [{ name: "Ojú Imọlẹ Media Foundation" }],
-  creator: "Ojú Imọlẹ Media Foundation",
-  publisher: "Ojú Imọlẹ Media Foundation",
+  authors: [{ name: "Ojú Imọ̀lẹ̀ Media Foundation" }],
+  creator: "Ojú Imọ̀lẹ̀ Media Foundation",
+  publisher: "Ojú Imọ̀lẹ̀ Media Foundation",
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "Ojú Imọlẹ Media Foundation | Eye of Light",
+    title: "Ojú Imọ̀lẹ̀ Media Foundation | Eye of Light",
     description:
       "Preserving cultural heritage and sacred traditions through media, education, and cultural preservation.",
     url: siteUrl,
-    siteName: "Ojú Imọlẹ Media Foundation",
+    siteName: "Ojú Imọ̀lẹ̀ Media Foundation",
     type: "website",
     locale: "en_TT",
     images: [
@@ -50,13 +50,13 @@ export const metadata: Metadata = {
         url: "/images/hero-sacred-flames.jpg",
         width: 1200,
         height: 630,
-        alt: "Ojú Imọlẹ Media Foundation | Eye of Light",
+        alt: "Ojú Imọ̀lẹ̀ Media Foundation | Eye of Light",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Ojú Imọlẹ Media Foundation | Eye of Light",
+    title: "Ojú Imọ̀lẹ̀ Media Foundation | Eye of Light",
     description:
       "Preserving cultural heritage and sacred traditions through media, education, and cultural preservation.",
     images: ["/images/hero-sacred-flames.jpg"],

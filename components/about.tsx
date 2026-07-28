@@ -41,7 +41,7 @@ export function About() {
           {/* Content */}
           <div className="space-y-6 order-1 lg:order-2">
             <p className="text-cream/80 text-lg lg:text-xl leading-relaxed">
-              Ojú Imọlẹ Media Foundation is a Trinidad and Tobago based nonprofit cultural media foundation with an international vision rooted in Isese traditions, cultural preservation, media storytelling, education, youth empowerment, humanitarian outreach, and spiritual heritage documentation.
+              Ojú Imọ̀lẹ̀ Media Foundation is a Trinidad and Tobago based nonprofit cultural media foundation with an international vision rooted in Isese traditions, cultural preservation, media storytelling, education, youth empowerment, humanitarian outreach, and spiritual heritage documentation.
             </p>
             <p className="text-cream/70 text-base lg:text-lg leading-relaxed">
               Our name, meaning &ldquo;Eye of Light&rdquo; in the Yoruba language, embodies our commitment to illuminating culture, preserving sacred knowledge, and shining light on untold stories that deserve to be shared with the world.

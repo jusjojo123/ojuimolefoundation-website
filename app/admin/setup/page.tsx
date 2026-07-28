@@ -5,7 +5,7 @@ import { hasAnyUser } from "@/app/actions/users"
 import { SetupForm } from "@/components/admin/setup-form"
 
 export const metadata: Metadata = {
-  title: "First-Time Setup | Ojú Imọlẹ Media Foundation",
+  title: "First-Time Setup | Ojú Imọ̀lẹ̀ Media Foundation",
   robots: { index: false, follow: false },
 }
 
@@ -20,7 +20,7 @@ export default async function AdminSetupPage() {
         <div className="text-center mb-10">
           <Link href="/" className="inline-block">
             <span className="gold-text-gradient font-heading text-2xl tracking-wide">
-              Ojú Imọlẹ
+              Ojú Imọ̀lẹ̀
             </span>
           </Link>
           <h1 className="font-heading text-3xl text-cream mt-6 mb-2">First-Time Setup</h1>

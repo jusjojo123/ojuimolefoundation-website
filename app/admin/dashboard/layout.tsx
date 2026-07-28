@@ -5,7 +5,7 @@ import { DashboardNav } from "@/components/admin/dashboard-nav"
 import { SignOutButton } from "@/components/admin/sign-out-button"
 
 export const metadata: Metadata = {
-  title: "Dashboard | Ojú Imọlẹ Media Foundation",
+  title: "Dashboard | Ojú Imọ̀lẹ̀ Media Foundation",
   robots: { index: false, follow: false },
 }
 
@@ -23,7 +23,7 @@ export default async function DashboardLayout({
         <header className="flex items-center justify-between py-6 border-b border-border">
           <Link href="/admin/dashboard" className="flex items-center gap-3">
             <span className="gold-text-gradient font-heading text-xl tracking-wide">
-              Ojú Imọlẹ
+              Ojú Imọ̀lẹ̀
             </span>
             <span className="text-cream/30 text-sm hidden sm:inline">CMS</span>
           </Link>

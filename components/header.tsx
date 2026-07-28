@@ -28,7 +28,7 @@ export function Header() {
             <div className="relative w-14 h-14 lg:w-20 lg:h-20">
               <Image
                 src="/images/logo.png"
-                alt="Ojú Imọlẹ Media Foundation Logo"
+                alt="Ojú Imọ̀lẹ̀ Media Foundation Logo"
                 fill
                 className="object-contain"
                 priority
@@ -36,7 +36,7 @@ export function Header() {
             </div>
             <div className="hidden sm:block">
               <p className="font-heading text-gold text-base lg:text-xl tracking-wider">
-                Ojú Imọlẹ
+                Ojú Imọ̀lẹ̀
               </p>
               <p className="text-cream/50 text-[10px] lg:text-xs tracking-[0.2em] uppercase">
                 Media Foundation

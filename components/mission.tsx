@@ -29,7 +29,7 @@ export function Mission() {
                 Our Mission
               </h3>
               <p className="text-cream/80 text-base lg:text-lg leading-relaxed mb-4">
-                Ojú Imọlẹ Media Foundation is committed to preserving cultural heritage, spiritual wisdom, oral traditions, and community stories through media, documentation, education, humanitarian outreach, and global cultural archiving.
+                Ojú Imọ̀lẹ̀ Media Foundation is committed to preserving cultural heritage, spiritual wisdom, oral traditions, and community stories through media, documentation, education, humanitarian outreach, and global cultural archiving.
               </p>
               <p className="text-cream/60 text-base leading-relaxed">
                 Rooted in Isese traditions and guided by the vision of unity, empowerment, and enlightenment, the foundation exists to honor ancestral knowledge, uplift communities, inspire future generations, and create lasting impact through storytelling, creativity, service, and cultural preservation.
