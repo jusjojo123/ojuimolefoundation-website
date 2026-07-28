@@ -1,0 +1,61 @@
+"use client"
+
+import { useRef, useState } from "react"
+import { uploadFile } from "@/app/actions/upload"
+
+type Props = {
+  accept: "image" | "video"
+  onUploaded: (url: string) => void
+  label?: string
+}
+
+const ACCEPT_MAP = {
+  image: "image/jpeg,image/png,image/webp,image/gif,image/avif",
+  video: "video/mp4,video/webm,video/quicktime,video/ogg",
+}
+
+export function MediaUploader({ accept, onUploaded, label }: Props) {
+  const inputRef = useRef<HTMLInputElement>(null)
+  const [uploading, setUploading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  async function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setError(null)
+    setUploading(true)
+
+    const fd = new FormData()
+    fd.append("file", file)
+    const res = await uploadFile(fd)
+
+    setUploading(false)
+    if (inputRef.current) inputRef.current.value = ""
+    if ("error" in res && res.error) {
+      setError(res.error)
+      return
+    }
+    if (res.url) onUploaded(res.url)
+  }
+
+  return (
+    <div className="flex flex-col gap-2">
+      <button
+        type="button"
+        onClick={() => inputRef.current?.click()}
+        disabled={uploading}
+        className="inline-flex items-center gap-2 self-start rounded-md border border-gold/40 text-gold px-4 py-2 text-sm hover:bg-gold/10 transition-colors disabled:opacity-50"
+      >
+        {uploading ? "Uploading…" : label ?? `Upload ${accept}`}
+      </button>
+      <input
+        ref={inputRef}
+        type="file"
+        accept={ACCEPT_MAP[accept]}
+        onChange={handleChange}
+        className="hidden"
+      />
+      {error && <span className="text-xs text-red-400">{error}</span>}
+    </div>
+  )
+}
