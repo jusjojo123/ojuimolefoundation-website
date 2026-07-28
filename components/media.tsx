@@ -1,6 +1,15 @@
-import Image from "next/image";
+import Image from "next/image"
+import { getFeaturedByType, getPublishedByTypes } from "@/lib/public-content"
+import { VideoPlayer } from "@/components/video-player"
+import { contentTypeLabel } from "@/lib/content-config"
+import type { Content } from "@/lib/db/schema"
 
-export function Media() {
+export async function Media() {
+  const [featured, articles] = await Promise.all([
+    getFeaturedByType("documentary"),
+    getPublishedByTypes(["article", "news", "interview"], 6),
+  ])
+
   return (
     <section id="media" className="py-24 lg:py-32 bg-card relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -18,32 +27,56 @@ export function Media() {
           </p>
         </div>
 
-        {/* Featured Documentary Placeholder */}
+        {/* Featured Documentary */}
         <div className="relative mb-16">
           <div className="relative aspect-video rounded overflow-hidden bg-muted border border-gold/10">
-            <Image
-              src="/images/documentary-filming.jpg"
-              alt="Documentary filmmaking in progress"
-              fill
-              className="object-cover opacity-60"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
-            
-            {/* Play Button Placeholder */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center">
-                <div className="w-20 h-20 rounded-full border-2 border-gold/50 flex items-center justify-center mx-auto mb-4 hover:border-gold transition-colors cursor-pointer">
-                  <svg className="w-8 h-8 text-gold ml-1" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
+            {featured ? (
+              <>
+                {featured.coverImage && (
+                  <Image
+                    src={featured.coverImage}
+                    alt={featured.title}
+                    fill
+                    className="object-cover opacity-60"
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
+                {featured.videoUrl ? (
+                  <VideoPlayer url={featured.videoUrl} poster={featured.coverImage} title={featured.title} />
+                ) : null}
+                <div className="absolute bottom-0 left-0 right-0 p-8 z-10 pointer-events-none">
+                  <span className="text-gold/70 text-sm tracking-wider uppercase">Featured Project</span>
+                  <h3 className="font-heading text-2xl lg:text-3xl text-cream mt-2">{featured.title}</h3>
+                  {featured.excerpt && (
+                    <p className="text-cream/60 mt-2 max-w-2xl">{featured.excerpt}</p>
+                  )}
                 </div>
-                <p className="text-gold/70 text-sm tracking-wider">Documentary Clip To Be Added</p>
-              </div>
-            </div>
-          </div>
-          <div className="absolute bottom-0 left-0 right-0 p-8 z-10">
-            <span className="text-gold/70 text-sm tracking-wider uppercase">Featured Project</span>
-            <h3 className="font-heading text-2xl lg:text-3xl text-cream mt-2">Cultural Heritage Documentary Series</h3>
+              </>
+            ) : (
+              <>
+                <Image
+                  src="/images/documentary-filming.jpg"
+                  alt="Documentary filmmaking in progress"
+                  fill
+                  className="object-cover opacity-60"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="w-20 h-20 rounded-full border-2 border-gold/50 flex items-center justify-center mx-auto mb-4">
+                      <svg className="w-8 h-8 text-gold ml-1" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
+                    <p className="text-gold/70 text-sm tracking-wider">Documentary Clip To Be Added</p>
+                  </div>
+                </div>
+                <div className="absolute bottom-0 left-0 right-0 p-8 z-10">
+                  <span className="text-gold/70 text-sm tracking-wider uppercase">Featured Project</span>
+                  <h3 className="font-heading text-2xl lg:text-3xl text-cream mt-2">Cultural Heritage Documentary Series</h3>
+                </div>
+              </>
+            )}
           </div>
         </div>
 
@@ -60,7 +93,7 @@ export function Media() {
               className="bg-background/50 rounded p-6 border border-gold/10 hover:border-gold/20 transition-colors group text-center"
             >
               <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-4 group-hover:bg-gold/20 transition-colors">
-                <svg className="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={category.icon} />
                 </svg>
               </div>
@@ -76,29 +109,61 @@ export function Media() {
             Articles and News
           </h3>
           <div className="grid md:grid-cols-3 gap-6">
-            {[1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className="bg-background/50 rounded overflow-hidden border border-gold/10 hover:border-gold/20 transition-colors group"
-              >
-                <div className="aspect-[4/3] bg-muted flex items-center justify-center">
-                  <div className="text-center p-4">
-                    <svg className="w-12 h-12 text-gold/20 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    <p className="text-cream/40 text-sm tracking-wider">Image To Be Added</p>
+            {articles.length > 0
+              ? articles.map((item) => <ArticleCard key={item.id} item={item} />)
+              : [1, 2, 3].map((i) => (
+                  <div
+                    key={i}
+                    className="bg-background/50 rounded overflow-hidden border border-gold/10"
+                  >
+                    <div className="aspect-[4/3] bg-muted flex items-center justify-center">
+                      <div className="text-center p-4">
+                        <svg className="w-12 h-12 text-gold/20 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <p className="text-cream/40 text-sm tracking-wider">Image To Be Added</p>
+                      </div>
+                    </div>
+                    <div className="p-6">
+                      <span className="text-gold/60 text-xs tracking-wider uppercase">Coming Soon</span>
+                      <h4 className="text-cream font-medium mt-2 mb-2">New Article Coming Soon</h4>
+                      <p className="text-cream/50 text-sm">Stories, updates, and news from our community will be featured here.</p>
+                    </div>
                   </div>
-                </div>
-                <div className="p-6">
-                  <span className="text-gold/60 text-xs tracking-wider uppercase">Coming Soon</span>
-                  <h4 className="text-cream font-medium mt-2 mb-2">New Article Coming Soon</h4>
-                  <p className="text-cream/50 text-sm">Stories, updates, and news from our community will be featured here.</p>
-                </div>
-              </div>
-            ))}
+                ))}
           </div>
         </div>
       </div>
     </section>
-  );
+  )
+}
+
+function ArticleCard({ item }: { item: Content }) {
+  return (
+    <article className="bg-background/50 rounded overflow-hidden border border-gold/10 hover:border-gold/20 transition-colors group">
+      <div className="aspect-[4/3] bg-muted relative overflow-hidden">
+        {item.coverImage ? (
+          <Image
+            src={item.coverImage}
+            alt={item.title}
+            fill
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <svg className="w-12 h-12 text-gold/20" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+          </div>
+        )}
+      </div>
+      <div className="p-6">
+        <span className="text-gold/60 text-xs tracking-wider uppercase">
+          {item.category ?? contentTypeLabel(item.type)}
+        </span>
+        <h4 className="text-cream font-medium mt-2 mb-2 text-balance">{item.title}</h4>
+        {item.excerpt && <p className="text-cream/50 text-sm text-pretty">{item.excerpt}</p>}
+      </div>
+    </article>
+  )
 }
