@@ -1,7 +1,7 @@
 "use client"
 
 import { useRef, useState } from "react"
-import { uploadFile } from "@/app/actions/upload"
+import { upload } from "@vercel/blob/client"
 
 type Props = {
   accept: "image" | "video"
@@ -26,14 +26,11 @@ export function MediaUploader({ accept, onUploaded, label }: Props) {
     setUploading(true)
 
     try {
-      const fd = new FormData()
-      fd.append("file", file)
-      const res = await uploadFile(fd)
-      if ("error" in res && res.error) {
-        setError(res.error)
-      } else if (res.url) {
-        onUploaded(res.url)
-      }
+      const blob = await upload(file.name, file, {
+        access: "public",
+        handleUploadUrl: "/api/upload",
+      })
+      onUploaded(blob.url)
     } catch (err) {
       console.log("[v0] upload client error:", err)
       setError("Upload failed. Please try again.")
