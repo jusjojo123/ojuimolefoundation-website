@@ -22,7 +22,7 @@ export function FutureVision() {
         {/* Vision Content */}
         <div className="text-center mb-16">
           <p className="text-cream/80 text-lg lg:text-xl leading-relaxed mb-6 max-w-3xl mx-auto">
-            As we grow, Ojú Imọlẹ Media Foundation envisions expanding our reach to serve communities across the Caribbean and throughout the diaspora. Our future plans include establishing cultural centers, developing comprehensive educational curricula, and building a global network of cultural preservation advocates.
+            As we grow, Ojú Imọ̀lẹ̀ Media Foundation envisions expanding our reach to serve communities across the Caribbean and throughout the diaspora. Our future plans include establishing cultural centers, developing comprehensive educational curricula, and building a global network of cultural preservation advocates.
           </p>
         </div>
 

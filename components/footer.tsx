@@ -30,14 +30,14 @@ export function Footer() {
               <div className="relative w-14 h-14">
                 <Image
                   src="/images/logo.png"
-                  alt="Ojú Imọlẹ Media Foundation"
+                  alt="Ojú Imọ̀lẹ̀ Media Foundation"
                   fill
                   className="object-contain"
                 />
               </div>
               <div>
                 <span className="font-heading text-gold text-lg tracking-wider block">
-                  Ojú Imọlẹ
+                  Ojú Imọ̀lẹ̀
                 </span>
                 <span className="text-cream/50 text-xs tracking-widest uppercase">
                   Media Foundation
@@ -112,7 +112,7 @@ export function Footer() {
         <div className="border-t border-gold/10 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
             <p className="text-cream/40">
-              © {currentYear} Ojú Imọlẹ Media Foundation. All rights reserved.
+              © {currentYear} Ojú Imọ̀lẹ̀ Media Foundation. All rights reserved.
             </p>
             <p className="text-cream/40">
               Founded in 2025 in Trinidad and Tobago

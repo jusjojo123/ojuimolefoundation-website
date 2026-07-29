@@ -147,7 +147,7 @@ export function Contact() {
                 </div>
                 <h4 className="font-heading text-xl text-cream mb-3">Thank You!</h4>
                 <p className="text-cream/60">
-                  Thank you for contacting Ojú Imọlẹ Media Foundation. Your message has been received.
+                  Thank you for contacting Ojú Imọ̀lẹ̀ Media Foundation. Your message has been received.
                 </p>
               </div>
             ) : (

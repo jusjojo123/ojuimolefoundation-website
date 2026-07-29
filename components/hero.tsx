@@ -31,7 +31,7 @@ export function Hero() {
           <div className="relative w-48 h-48 sm:w-56 sm:h-56 md:w-72 md:h-72 lg:w-80 lg:h-80 xl:w-96 xl:h-96">
             <Image
               src="/images/logo.png"
-              alt="Ojú Imọlẹ Media Foundation"
+              alt="Ojú Imọ̀lẹ̀ Media Foundation"
               fill
               className="object-contain drop-shadow-[0_0_40px_rgba(201,162,39,0.3)]"
               priority
@@ -42,7 +42,7 @@ export function Hero() {
         {/* Foundation Name */}
         <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-cream tracking-wider mb-3">
           <span className="bg-gradient-to-r from-gold via-gold-light to-gold bg-clip-text text-transparent">
-            Ojú Imọlẹ
+            Ojú Imọ̀lẹ̀
           </span>
         </h1>
         <p className="text-cream/50 text-xs sm:text-sm md:text-base tracking-[0.35em] uppercase mb-2">
