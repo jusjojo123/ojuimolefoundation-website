@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Cinzel, Cormorant_Garamond } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 
 const cinzel = Cinzel({
@@ -64,7 +65,44 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
+  verification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+    ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }
+    : undefined,
+  category: "Nonprofit Organization",
+};
+
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "NGO",
+  name: "Ojú Imọ̀lẹ̀ Media Foundation",
+  alternateName: "Eye of Light",
+  url: siteUrl,
+  logo: `${siteUrl}/images/logo.png`,
+  image: `${siteUrl}/images/hero-sacred-flames.jpg`,
+  description:
+    "Ojú Imọ̀lẹ̀ Media Foundation preserves cultural heritage, documents sacred traditions, empowers communities, and inspires future generations through media, education, and cultural preservation.",
+  email: "ojuimolefoundation@gmail.com",
+  telephone: "+1-868-254-2540",
+  foundingDate: "2025",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "6th Company Village, New Grant",
+    addressCountry: "TT",
+    addressRegion: "Trinidad and Tobago",
+  },
+  sameAs: [
+    "https://facebook.com/OjuImoleMedia",
+    "https://instagram.com/ojuimolemedia",
+    "https://tiktok.com/@ojuimolemedia",
+  ],
 };
 
 export const viewport: Viewport = {
@@ -78,13 +116,22 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+
   return (
     <html lang="en" className="bg-background">
       <body
         className={`${cinzel.variable} ${cormorant.variable} font-sans min-h-screen`}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationJsonLd),
+          }}
+        />
         {children}
       </body>
+      {gaId ? <GoogleAnalytics gaId={gaId} /> : null}
     </html>
   );
 }
