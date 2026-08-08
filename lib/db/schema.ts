@@ -4,6 +4,7 @@ import {
   timestamp,
   boolean,
   serial,
+  integer,
   jsonb,
 } from "drizzle-orm/pg-core"
 
@@ -18,6 +19,9 @@ export const user = pgTable("user", {
   image: text("image"),
   // Role-based permissions: "admin" or "editor".
   role: text("role").notNull().default("editor"),
+  // Per-editor permission flags (admins always have both regardless).
+  canPublish: boolean("canPublish").notNull().default(false),
+  canDelete: boolean("canDelete").notNull().default(false),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
 })
@@ -71,7 +75,7 @@ export type GalleryImage = { url: string; alt?: string }
 
 export const content = pgTable("content", {
   id: serial("id").primaryKey(),
-  // article | interview | documentary | news | event | project | video | gallery
+  // See lib/content-config.ts for the full list of content types.
   type: text("type").notNull(),
   title: text("title").notNull(),
   slug: text("slug").notNull(),
@@ -80,10 +84,18 @@ export const content = pgTable("content", {
   category: text("category"),
   coverImage: text("coverImage"),
   videoUrl: text("videoUrl"),
+  audioUrl: text("audioUrl"),
+  documentUrl: text("documentUrl"),
   gallery: jsonb("gallery").$type<GalleryImage[]>().notNull().default([]),
+  tags: jsonb("tags").$type<string[]>().notNull().default([]),
   location: text("location"),
   eventDate: timestamp("eventDate"),
-  // draft | published
+  publishDate: timestamp("publishDate"),
+  // SEO + social metadata
+  seoTitle: text("seoTitle"),
+  seoDescription: text("seoDescription"),
+  socialImage: text("socialImage"),
+  // draft | published | archived
   status: text("status").notNull().default("draft"),
   featured: boolean("featured").notNull().default(false),
   authorId: text("authorId").notNull(),
@@ -95,3 +107,37 @@ export const content = pgTable("content", {
 
 export type Content = typeof content.$inferSelect
 export type NewContent = typeof content.$inferInsert
+
+// --- Media library ---------------------------------------------------------
+
+export const media = pgTable("media", {
+  id: serial("id").primaryKey(),
+  url: text("url").notNull(),
+  pathname: text("pathname"),
+  // image | video | audio | document
+  kind: text("kind").notNull().default("image"),
+  filename: text("filename"),
+  title: text("title"),
+  alt: text("alt"),
+  tags: jsonb("tags").$type<string[]>().notNull().default([]),
+  size: serial("size"),
+  contentType: text("contentType"),
+  uploadedById: text("uploadedById"),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+})
+
+export type Media = typeof media.$inferSelect
+
+// --- Newsletter ------------------------------------------------------------
+
+export const newsletterSubscriber = pgTable("newsletter_subscriber", {
+  id: serial("id").primaryKey(),
+  email: text("email").notNull().unique(),
+  name: text("name"),
+  // active | unsubscribed
+  status: text("status").notNull().default("active"),
+  source: text("source"),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+})
+
+export type NewsletterSubscriber = typeof newsletterSubscriber.$inferSelect
