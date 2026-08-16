@@ -5,6 +5,15 @@ import { headers } from "next/headers"
 
 const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/avif"]
 const VIDEO_TYPES = ["video/mp4", "video/webm", "video/ogg", "video/quicktime"]
+const AUDIO_TYPES = ["audio/mpeg", "audio/mp3", "audio/wav", "audio/ogg", "audio/webm", "audio/aac", "audio/x-m4a", "audio/mp4"]
+const DOCUMENT_TYPES = [
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/vnd.ms-powerpoint",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  "text/plain",
+]
 
 // Client-side upload token exchange. The browser uploads the file bytes
 // directly to Vercel Blob; only small JSON requests pass through this route,

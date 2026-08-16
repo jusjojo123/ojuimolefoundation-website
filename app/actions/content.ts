@@ -3,12 +3,15 @@
 import { db } from "@/lib/db"
 import { content, type GalleryImage } from "@/lib/db/schema"
 import { getCurrentUser } from "@/lib/auth-helpers"
+import { contentTypePath, isValidContentType } from "@/lib/content-config"
 import { and, desc, eq, ilike, or, sql } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 
 export type ContentActionResult =
   | { ok: true; id: number; slug: string }
   | { ok: false; error: string }
+
+export type ContentStatus = "draft" | "published" | "archived"
 
 function slugify(input: string): string {
   return input
@@ -24,7 +27,6 @@ async function uniqueSlug(base: string, ignoreId?: number): Promise<string> {
   const root = base || "untitled"
   let candidate = root
   let n = 1
-  // Loop until we find a slug not used by a different row.
   while (true) {
     const existing = await db
       .select({ id: content.id })
@@ -47,18 +49,26 @@ type ContentInput = {
   category?: string
   coverImage?: string
   videoUrl?: string
+  audioUrl?: string
+  documentUrl?: string
   gallery?: GalleryImage[]
+  tags?: string[]
   location?: string
   eventDate?: string | null
+  publishDate?: string | null
+  authorName?: string
+  seoTitle?: string
+  seoDescription?: string
+  socialImage?: string
   featured?: boolean
-  status?: "draft" | "published"
+  status?: ContentStatus
 }
 
 /** Revalidate the public surfaces that depend on CMS content. */
-function revalidatePublic() {
+function revalidatePublic(type?: string) {
+  revalidatePath("/", "layout")
   revalidatePath("/")
-  revalidatePath("/media")
-  revalidatePath("/gallery")
+  if (type) revalidatePath(`/${contentTypePath(type)}`)
 }
 
 export async function saveContent(input: ContentInput): Promise<ContentActionResult> {
@@ -66,11 +76,22 @@ export async function saveContent(input: ContentInput): Promise<ContentActionRes
   if (!user) return { ok: false, error: "Unauthorized" }
 
   if (!input.title?.trim()) return { ok: false, error: "Title is required." }
-  if (!input.type?.trim()) return { ok: false, error: "Content type is required." }
+  if (!isValidContentType(input.type)) return { ok: false, error: "Invalid content type." }
 
-  const status = input.status === "published" ? "published" : "draft"
-  const slug = await uniqueSlug(input.slug?.trim() ? slugify(input.slug) : slugify(input.title), input.id)
+  // Resolve requested status against this user's permissions.
+  let status: ContentStatus =
+    input.status === "published" || input.status === "archived" ? input.status : "draft"
+  if ((status === "published" || status === "archived") && !user.canPublish) {
+    // Editors without publish rights can only save drafts.
+    status = "draft"
+  }
+
+  const slug = await uniqueSlug(
+    input.slug?.trim() ? slugify(input.slug) : slugify(input.title),
+    input.id,
+  )
   const eventDate = input.eventDate ? new Date(input.eventDate) : null
+  const publishDate = input.publishDate ? new Date(input.publishDate) : null
 
   const values = {
     type: input.type,
@@ -81,9 +102,17 @@ export async function saveContent(input: ContentInput): Promise<ContentActionRes
     category: input.category?.trim() || null,
     coverImage: input.coverImage?.trim() || null,
     videoUrl: input.videoUrl?.trim() || null,
+    audioUrl: input.audioUrl?.trim() || null,
+    documentUrl: input.documentUrl?.trim() || null,
     gallery: input.gallery ?? [],
+    tags: input.tags ?? [],
     location: input.location?.trim() || null,
     eventDate,
+    publishDate,
+    authorName: input.authorName?.trim() || user.name,
+    seoTitle: input.seoTitle?.trim() || null,
+    seoDescription: input.seoDescription?.trim() || null,
+    socialImage: input.socialImage?.trim() || null,
     status,
     featured: input.featured ?? false,
     updatedAt: new Date(),
@@ -91,9 +120,8 @@ export async function saveContent(input: ContentInput): Promise<ContentActionRes
 
   try {
     if (input.id) {
-      // Preserve publishedAt: set it the first time something is published.
       const [existing] = await db
-        .select({ publishedAt: content.publishedAt, status: content.status })
+        .select({ publishedAt: content.publishedAt })
         .from(content)
         .where(eq(content.id, input.id))
         .limit(1)
@@ -107,7 +135,7 @@ export async function saveContent(input: ContentInput): Promise<ContentActionRes
         .set({ ...values, publishedAt })
         .where(eq(content.id, input.id))
         .returning({ id: content.id, slug: content.slug })
-      revalidatePublic()
+      revalidatePublic(input.type)
       return { ok: true, id: row.id, slug: row.slug }
     }
 
@@ -116,11 +144,10 @@ export async function saveContent(input: ContentInput): Promise<ContentActionRes
       .values({
         ...values,
         authorId: user.id,
-        authorName: user.name,
         publishedAt: status === "published" ? new Date() : null,
       })
       .returning({ id: content.id, slug: content.slug })
-    revalidatePublic()
+    revalidatePublic(input.type)
     return { ok: true, id: row.id, slug: row.slug }
   } catch (err) {
     console.log("[v0] saveContent failed:", err)
@@ -130,14 +157,16 @@ export async function saveContent(input: ContentInput): Promise<ContentActionRes
 
 export async function setPublishStatus(
   id: number,
-  status: "draft" | "published",
+  status: ContentStatus,
 ): Promise<ContentActionResult> {
   const user = await getCurrentUser()
   if (!user) return { ok: false, error: "Unauthorized" }
+  if (!user.canPublish)
+    return { ok: false, error: "You do not have permission to change publish status." }
 
   try {
     const [existing] = await db
-      .select({ publishedAt: content.publishedAt, slug: content.slug })
+      .select({ publishedAt: content.publishedAt, slug: content.slug, type: content.type })
       .from(content)
       .where(eq(content.id, id))
       .limit(1)
@@ -151,7 +180,7 @@ export async function setPublishStatus(
       .set({ status, publishedAt, updatedAt: new Date() })
       .where(eq(content.id, id))
       .returning({ id: content.id, slug: content.slug })
-    revalidatePublic()
+    revalidatePublic(existing.type)
     return { ok: true, id: row.id, slug: row.slug }
   } catch (err) {
     console.log("[v0] setPublishStatus failed:", err)
@@ -159,7 +188,10 @@ export async function setPublishStatus(
   }
 }
 
-export async function toggleFeatured(id: number, featured: boolean): Promise<ContentActionResult> {
+export async function toggleFeatured(
+  id: number,
+  featured: boolean,
+): Promise<ContentActionResult> {
   const user = await getCurrentUser()
   if (!user) return { ok: false, error: "Unauthorized" }
   try {
@@ -167,9 +199,9 @@ export async function toggleFeatured(id: number, featured: boolean): Promise<Con
       .update(content)
       .set({ featured, updatedAt: new Date() })
       .where(eq(content.id, id))
-      .returning({ id: content.id, slug: content.slug })
+      .returning({ id: content.id, slug: content.slug, type: content.type })
     if (!row) return { ok: false, error: "Not found." }
-    revalidatePublic()
+    revalidatePublic(row.type)
     return { ok: true, id: row.id, slug: row.slug }
   } catch (err) {
     console.log("[v0] toggleFeatured failed:", err)
@@ -180,11 +212,14 @@ export async function toggleFeatured(id: number, featured: boolean): Promise<Con
 export async function deleteContent(id: number): Promise<{ ok: boolean; error?: string }> {
   const user = await getCurrentUser()
   if (!user) return { ok: false, error: "Unauthorized" }
-  // Only admins can delete outright; editors can unpublish instead.
-  if (user.role !== "admin") return { ok: false, error: "Only admins can delete content." }
+  if (!user.canDelete)
+    return { ok: false, error: "You do not have permission to delete content." }
   try {
-    await db.delete(content).where(eq(content.id, id))
-    revalidatePublic()
+    const [row] = await db
+      .delete(content)
+      .where(eq(content.id, id))
+      .returning({ type: content.type })
+    revalidatePublic(row?.type)
     return { ok: true }
   } catch (err) {
     console.log("[v0] deleteContent failed:", err)
@@ -207,7 +242,11 @@ export async function listContent(opts: {
   if (opts.q?.trim()) {
     const term = `%${opts.q.trim()}%`
     filters.push(
-      or(ilike(content.title, term), ilike(content.excerpt, term), ilike(content.category, term)),
+      or(
+        ilike(content.title, term),
+        ilike(content.excerpt, term),
+        ilike(content.category, term),
+      ),
     )
   }
 
@@ -227,13 +266,14 @@ export async function getContentById(id: number) {
 
 export async function getDashboardStats() {
   const user = await getCurrentUser()
-  if (!user) return { total: 0, published: 0, drafts: 0 }
+  if (!user) return { total: 0, published: 0, drafts: 0, archived: 0 }
   const [row] = await db
     .select({
       total: sql<number>`count(*)::int`,
       published: sql<number>`count(*) filter (where ${content.status} = 'published')::int`,
       drafts: sql<number>`count(*) filter (where ${content.status} = 'draft')::int`,
+      archived: sql<number>`count(*) filter (where ${content.status} = 'archived')::int`,
     })
     .from(content)
-  return row ?? { total: 0, published: 0, drafts: 0 }
+  return row ?? { total: 0, published: 0, drafts: 0, archived: 0 }
 }
