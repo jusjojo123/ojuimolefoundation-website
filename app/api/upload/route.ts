@@ -32,7 +32,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           throw new Error("Unauthorized")
         }
         return {
-          allowedContentTypes: [...IMAGE_TYPES, ...VIDEO_TYPES],
+          allowedContentTypes: [...IMAGE_TYPES, ...VIDEO_TYPES, ...AUDIO_TYPES, ...DOCUMENT_TYPES],
           addRandomSuffix: true,
           maximumSizeInBytes: 200 * 1024 * 1024, // 200MB
         }
