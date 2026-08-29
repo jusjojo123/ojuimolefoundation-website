@@ -12,6 +12,7 @@ import { Gallery } from "@/components/gallery";
 import { FutureVision } from "@/components/future-vision";
 import { Donate } from "@/components/donate";
 import { Contact } from "@/components/contact";
+import { NewsletterSignup } from "@/components/public/newsletter-signup";
 import { Footer } from "@/components/footer";
 
 export default function Home() {
@@ -31,6 +32,7 @@ export default function Home() {
       <FutureVision />
       <Donate />
       <Contact />
+      <NewsletterSignup />
       <Footer />
     </main>
   );
