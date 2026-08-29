@@ -14,26 +14,29 @@ import { Donate } from "@/components/donate";
 import { Contact } from "@/components/contact";
 import { NewsletterSignup } from "@/components/public/newsletter-signup";
 import { Footer } from "@/components/footer";
+import { EditRoot } from "@/components/edit/edit-root";
 
 export default function Home() {
   return (
-    <main>
-      <Header />
-      <Hero />
-      <About />
-      <Mission />
-      <FounderMessage />
-      <Leadership />
-      <Programs />
-      <SpiritualHeritage />
-      <HonoringElders />
-      <Media />
-      <Gallery />
-      <FutureVision />
-      <Donate />
-      <Contact />
-      <NewsletterSignup />
-      <Footer />
-    </main>
+    <EditRoot>
+      <main>
+        <Header />
+        <Hero />
+        <About />
+        <Mission />
+        <FounderMessage />
+        <Leadership />
+        <Programs />
+        <SpiritualHeritage />
+        <HonoringElders />
+        <Media />
+        <Gallery />
+        <FutureVision />
+        <Donate />
+        <Contact />
+        <NewsletterSignup />
+        <Footer />
+      </main>
+    </EditRoot>
   );
 }

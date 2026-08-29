@@ -98,8 +98,15 @@ export const content = pgTable("content", {
   // draft | published | archived
   status: text("status").notNull().default("draft"),
   featured: boolean("featured").notNull().default(false),
+  // Manual ordering within a type (used for leadership/team, partners, etc.)
+  sortOrder: integer("sortOrder").notNull().default(0),
+  // Per-type extra settings (e.g. leadership imagePosition/isFramed).
+  meta: jsonb("meta").$type<Record<string, unknown>>().notNull().default({}),
   authorId: text("authorId").notNull(),
   authorName: text("authorName"),
+  // Audit: who last edited this item.
+  updatedById: text("updatedById"),
+  updatedByName: text("updatedByName"),
   publishedAt: timestamp("publishedAt"),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
@@ -107,6 +114,35 @@ export const content = pgTable("content", {
 
 export type Content = typeof content.$inferSelect
 export type NewContent = typeof content.$inferInsert
+
+// --- Site content: inline-editable page copy/image overrides ---------------
+
+export const siteContent = pgTable("site_content", {
+  key: text("key").primaryKey(),
+  // text | richtext | image
+  type: text("type").notNull().default("text"),
+  value: text("value").notNull().default(""),
+  updatedById: text("updatedById"),
+  updatedByName: text("updatedByName"),
+  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+})
+
+export type SiteContent = typeof siteContent.$inferSelect
+
+// --- Analytics: first-party page views -------------------------------------
+
+export const pageview = pgTable("pageview", {
+  id: serial("id").primaryKey(),
+  path: text("path").notNull(),
+  referrer: text("referrer"),
+  source: text("source"),
+  country: text("country"),
+  device: text("device"),
+  sessionId: text("sessionId"),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+})
+
+export type Pageview = typeof pageview.$inferSelect
 
 // --- Media library ---------------------------------------------------------
 
