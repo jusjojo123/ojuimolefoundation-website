@@ -1,7 +1,7 @@
 import "server-only"
 import { db } from "@/lib/db"
 import { content, type Content } from "@/lib/db/schema"
-import { and, desc, eq, inArray, sql } from "drizzle-orm"
+import { and, desc, eq, inArray, ne, sql } from "drizzle-orm"
 import {
   CONTENT_TYPE_LIST,
   type ContentTypeConfig,
@@ -77,7 +77,14 @@ export async function getPublishedBySlug(slug: string): Promise<Content | null> 
     const [row] = await db
       .select()
       .from(content)
-      .where(and(eq(content.status, "published"), eq(content.slug, slug)))
+      .where(
+        and(
+          eq(content.status, "published"),
+          eq(content.slug, slug),
+          // The homepage team section is not a standalone detail page.
+          ne(content.type, "leadership"),
+        ),
+      )
       .limit(1)
     return row ?? null
   } catch (err) {
@@ -94,7 +101,7 @@ export async function allPublishedSlugs(): Promise<
     return await db
       .select({ slug: content.slug, type: content.type, updatedAt: content.updatedAt })
       .from(content)
-      .where(eq(content.status, "published"))
+      .where(and(eq(content.status, "published"), ne(content.type, "leadership")))
   } catch (err) {
     console.log("[v0] allPublishedSlugs failed:", err)
     return []

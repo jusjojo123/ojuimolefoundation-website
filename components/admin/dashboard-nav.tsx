@@ -7,8 +7,10 @@ type NavItem = { href: string; label: string; adminOnly?: boolean }
 
 const NAV: NavItem[] = [
   { href: "/admin/dashboard", label: "Overview" },
+  { href: "/admin/dashboard/analytics", label: "Analytics", adminOnly: true },
   { href: "/admin/dashboard/new", label: "New Content" },
   { href: "/admin/dashboard/media", label: "Media Library" },
+  { href: "/admin/dashboard/team", label: "Directors / Leadership" },
   { href: "/admin/dashboard/newsletter", label: "Newsletter", adminOnly: true },
   { href: "/admin/dashboard/users", label: "Team & Roles", adminOnly: true },
 ]

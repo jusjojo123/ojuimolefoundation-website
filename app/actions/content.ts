@@ -115,6 +115,8 @@ export async function saveContent(input: ContentInput): Promise<ContentActionRes
     socialImage: input.socialImage?.trim() || null,
     status,
     featured: input.featured ?? false,
+    updatedById: user.id,
+    updatedByName: user.name,
     updatedAt: new Date(),
   }
 
@@ -177,7 +179,13 @@ export async function setPublishStatus(
 
     const [row] = await db
       .update(content)
-      .set({ status, publishedAt, updatedAt: new Date() })
+      .set({
+        status,
+        publishedAt,
+        updatedById: user.id,
+        updatedByName: user.name,
+        updatedAt: new Date(),
+      })
       .where(eq(content.id, id))
       .returning({ id: content.id, slug: content.slug })
     revalidatePublic(existing.type)
