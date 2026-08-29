@@ -113,6 +113,25 @@ export async function updateUserRole(
   return { ok: true }
 }
 
+/** Admin-only: set an editor's publish/delete permission flags. */
+export async function updateUserPermissions(
+  userId: string,
+  perms: { canPublish?: boolean; canDelete?: boolean },
+): Promise<SimpleResult> {
+  const current = await getCurrentUser()
+  if (!current) return { ok: false, error: "Unauthorized" }
+  if (current.role !== "admin") return { ok: false, error: "Only admins can change permissions." }
+
+  const patch: { canPublish?: boolean; canDelete?: boolean } = {}
+  if (typeof perms.canPublish === "boolean") patch.canPublish = perms.canPublish
+  if (typeof perms.canDelete === "boolean") patch.canDelete = perms.canDelete
+  if (Object.keys(patch).length === 0) return { ok: true }
+
+  await db.update(userTable).set(patch).where(eq(userTable.id, userId))
+  revalidatePath("/admin/dashboard/users")
+  return { ok: true }
+}
+
 /** Admin-only: delete a user. Cannot delete yourself or the last admin. */
 export async function deleteUser(userId: string): Promise<SimpleResult> {
   const current = await getCurrentUser()
@@ -147,6 +166,8 @@ export async function listUsers() {
       name: userTable.name,
       email: userTable.email,
       role: userTable.role,
+      canPublish: userTable.canPublish,
+      canDelete: userTable.canDelete,
       createdAt: userTable.createdAt,
     })
     .from(userTable)

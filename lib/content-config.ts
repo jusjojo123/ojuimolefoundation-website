@@ -27,6 +27,8 @@ export type ContentStatus = "draft" | "published" | "archived"
 
 export type ContentFieldFlags = {
   body: boolean
+  /** When true, the body uses the rich-text editor; otherwise a plain textarea. */
+  richText: boolean
   excerpt: boolean
   coverImage: boolean
   videoUrl: boolean
@@ -53,6 +55,7 @@ export type ContentTypeConfig = {
 
 const base: ContentFieldFlags = {
   body: true,
+  richText: true,
   excerpt: true,
   coverImage: true,
   videoUrl: false,

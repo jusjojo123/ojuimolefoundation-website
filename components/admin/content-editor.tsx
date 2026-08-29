@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { saveContent } from "@/app/actions/content"
 import { MediaUploader } from "@/components/admin/media-uploader"
+import { RichTextEditor } from "@/components/admin/rich-text-editor"
 import {
   CONTENT_TYPES,
   CONTENT_TYPE_LIST,
@@ -13,7 +14,11 @@ import {
 } from "@/lib/content-config"
 import type { Content, GalleryImage } from "@/lib/db/schema"
 
-type Props = { initial?: Content; defaultType?: ContentType }
+type Props = {
+  initial?: Content
+  defaultType?: ContentType
+  canPublish?: boolean
+}
 
 const inputClass =
   "w-full rounded-md bg-background border border-border px-4 py-2.5 text-cream outline-none focus:border-gold/60 transition-colors"
@@ -26,7 +31,7 @@ function toDateInput(d: Date | string | null | undefined): string {
   return date.toISOString().slice(0, 10)
 }
 
-export function ContentEditor({ initial, defaultType }: Props) {
+export function ContentEditor({ initial, defaultType, canPublish = true }: Props) {
   const router = useRouter()
   const [type, setType] = useState<ContentType>(
     (initial?.type as ContentType) ?? defaultType ?? "article",
@@ -38,15 +43,32 @@ export function ContentEditor({ initial, defaultType }: Props) {
   const [category, setCategory] = useState(initial?.category ?? "")
   const [coverImage, setCoverImage] = useState(initial?.coverImage ?? "")
   const [videoUrl, setVideoUrl] = useState(initial?.videoUrl ?? "")
+  const [audioUrl, setAudioUrl] = useState(initial?.audioUrl ?? "")
+  const [documentUrl, setDocumentUrl] = useState(initial?.documentUrl ?? "")
   const [gallery, setGallery] = useState<GalleryImage[]>(initial?.gallery ?? [])
+  const [tags, setTags] = useState<string[]>(initial?.tags ?? [])
+  const [tagInput, setTagInput] = useState("")
   const [location, setLocation] = useState(initial?.location ?? "")
   const [eventDate, setEventDate] = useState(toDateInput(initial?.eventDate))
+  const [publishDate, setPublishDate] = useState(toDateInput(initial?.publishDate))
+  const [authorName, setAuthorName] = useState(initial?.authorName ?? "")
+  const [seoTitle, setSeoTitle] = useState(initial?.seoTitle ?? "")
+  const [seoDescription, setSeoDescription] = useState(initial?.seoDescription ?? "")
+  const [socialImage, setSocialImage] = useState(initial?.socialImage ?? "")
   const [featured, setFeatured] = useState(initial?.featured ?? false)
+  const [showSeo, setShowSeo] = useState(false)
 
   const [error, setError] = useState<string | null>(null)
   const [saving, setSaving] = useState<null | "draft" | "published">(null)
 
   const fields = useMemo(() => CONTENT_TYPES[type].fields, [type])
+  const typeLabel = CONTENT_TYPES[type].label
+
+  function addTag() {
+    const t = tagInput.trim()
+    if (t && !tags.includes(t)) setTags([...tags, t])
+    setTagInput("")
+  }
 
   async function save(status: "draft" | "published") {
     setError(null)
@@ -61,9 +83,17 @@ export function ContentEditor({ initial, defaultType }: Props) {
       category,
       coverImage,
       videoUrl,
+      audioUrl,
+      documentUrl,
       gallery,
+      tags,
       location,
       eventDate: eventDate || null,
+      publishDate: publishDate || null,
+      authorName,
+      seoTitle,
+      seoDescription,
+      socialImage,
       featured,
       status,
     })
@@ -103,7 +133,7 @@ export function ContentEditor({ initial, defaultType }: Props) {
       {/* Title */}
       <div className="flex flex-col gap-2">
         <label className={labelClass}>Title</label>
-        <input value={title} onChange={(e) => setTitle(e.target.value)} className={inputClass} placeholder="Enter a title" />
+        <input value={title} onChange={(e) => setTitle(e.target.value)} className={inputClass} placeholder={`Enter a ${typeLabel.toLowerCase()} title`} />
       </div>
 
       {/* Slug */}
@@ -129,18 +159,18 @@ export function ContentEditor({ initial, defaultType }: Props) {
       {/* Excerpt */}
       {fields.excerpt && (
         <div className="flex flex-col gap-2">
-          <label className={labelClass}>{type === "gallery" ? "Caption" : "Excerpt / Summary"}</label>
-          <textarea value={excerpt} onChange={(e) => setExcerpt(e.target.value)} rows={2} className={inputClass} placeholder="A short summary shown in listings" />
+          <label className={labelClass}>{type === "gallery" ? "Caption" : "Summary"}</label>
+          <textarea value={excerpt} onChange={(e) => setExcerpt(e.target.value)} rows={2} className={inputClass} placeholder="A short summary shown in listings and social shares" />
         </div>
       )}
 
       {/* Cover image */}
       {fields.coverImage && (
         <div className="flex flex-col gap-2">
-          <label className={labelClass}>{type === "gallery" ? "Photo" : "Cover Image"}</label>
+          <label className={labelClass}>{type === "gallery" ? "Photo" : "Featured Image"}</label>
           {coverImage && (
             <div className="relative w-full max-w-sm aspect-video rounded-md overflow-hidden border border-border">
-              <Image src={coverImage} alt="Cover preview" fill className="object-cover" />
+              <Image src={coverImage || "/placeholder.svg"} alt="Cover preview" fill className="object-cover" />
             </div>
           )}
           <div className="flex items-center gap-3">
@@ -164,6 +194,42 @@ export function ContentEditor({ initial, defaultType }: Props) {
         </div>
       )}
 
+      {/* Audio */}
+      {fields.audioUrl && (
+        <div className="flex flex-col gap-2">
+          <label className={labelClass}>Audio Recording</label>
+          {audioUrl && <audio controls src={audioUrl} className="w-full max-w-sm" />}
+          <div className="flex items-center gap-3">
+            <MediaUploader accept="audio" onUploaded={setAudioUrl} label={audioUrl ? "Replace audio" : "Upload audio"} />
+            {audioUrl && (
+              <button type="button" onClick={() => setAudioUrl("")} className="text-xs text-red-400 hover:underline">
+                Remove
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Document / PDF */}
+      {fields.documentUrl && (
+        <div className="flex flex-col gap-2">
+          <label className={labelClass}>Document / PDF</label>
+          <div className="flex items-center gap-3">
+            <MediaUploader accept="document" onUploaded={setDocumentUrl} label={documentUrl ? "Replace document" : "Upload document"} />
+            {documentUrl && (
+              <>
+                <a href={documentUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-gold hover:underline">
+                  View file
+                </a>
+                <button type="button" onClick={() => setDocumentUrl("")} className="text-xs text-red-400 hover:underline">
+                  Remove
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Location & event date */}
       <div className="grid sm:grid-cols-2 gap-4">
         {fields.location && (
@@ -180,19 +246,103 @@ export function ContentEditor({ initial, defaultType }: Props) {
         )}
       </div>
 
-      {/* Body */}
+      {/* Author & publication date */}
+      <div className="grid sm:grid-cols-2 gap-4">
+        <div className="flex flex-col gap-2">
+          <label className={labelClass}>Author Name (optional)</label>
+          <input value={authorName} onChange={(e) => setAuthorName(e.target.value)} className={inputClass} placeholder="Defaults to your account name" />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label className={labelClass}>Publication Date (optional)</label>
+          <input type="date" value={publishDate} onChange={(e) => setPublishDate(e.target.value)} className={inputClass} />
+        </div>
+      </div>
+
+      {/* Body — rich text */}
       {fields.body && (
         <div className="flex flex-col gap-2">
-          <label className={labelClass}>Body</label>
-          <textarea value={body} onChange={(e) => setBody(e.target.value)} rows={12} className={`${inputClass} font-sans leading-relaxed`} placeholder="Write the full content here…" />
-          <span className="text-xs text-cream/40">Plain text and line breaks are preserved.</span>
+          <label className={labelClass}>{fields.richText ? "Full Content" : "Description"}</label>
+          {fields.richText ? (
+            <RichTextEditor value={body} onChange={setBody} placeholder="Write the full content here…" />
+          ) : (
+            <textarea value={body} onChange={(e) => setBody(e.target.value)} rows={6} className={`${inputClass} leading-relaxed`} placeholder="Write a description…" />
+          )}
         </div>
       )}
 
       {/* Gallery */}
-      {fields.gallery && (
-        <GalleryEditor gallery={gallery} setGallery={setGallery} />
-      )}
+      {fields.gallery && <GalleryEditor gallery={gallery} setGallery={setGallery} />}
+
+      {/* Tags */}
+      <div className="flex flex-col gap-2">
+        <label className={labelClass}>Tags</label>
+        {tags.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {tags.map((t) => (
+              <span key={t} className="inline-flex items-center gap-1.5 rounded-full bg-gold/10 border border-gold/30 text-gold text-xs px-3 py-1">
+                {t}
+                <button type="button" onClick={() => setTags(tags.filter((x) => x !== t))} className="hover:text-red-400" aria-label={`Remove ${t}`}>
+                  ×
+                </button>
+              </span>
+            ))}
+          </div>
+        )}
+        <input
+          value={tagInput}
+          onChange={(e) => setTagInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.nativeEvent.isComposing) {
+              e.preventDefault()
+              addTag()
+            }
+          }}
+          onBlur={addTag}
+          className={inputClass}
+          placeholder="Type a tag and press Enter"
+        />
+      </div>
+
+      {/* SEO & social (collapsible) */}
+      <div className="rounded-md border border-border">
+        <button
+          type="button"
+          onClick={() => setShowSeo((s) => !s)}
+          className="flex w-full items-center justify-between px-4 py-3 text-sm text-cream/80 hover:text-cream"
+        >
+          <span>SEO &amp; Social Sharing</span>
+          <span className="text-cream/40">{showSeo ? "−" : "+"}</span>
+        </button>
+        {showSeo && (
+          <div className="flex flex-col gap-4 border-t border-border p-4">
+            <div className="flex flex-col gap-2">
+              <label className={labelClass}>SEO Title</label>
+              <input value={seoTitle} onChange={(e) => setSeoTitle(e.target.value)} className={inputClass} placeholder="Defaults to the title" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className={labelClass}>SEO Description</label>
+              <textarea value={seoDescription} onChange={(e) => setSeoDescription(e.target.value)} rows={2} className={inputClass} placeholder="Defaults to the summary" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className={labelClass}>Social Sharing Image</label>
+              {socialImage && (
+                <div className="relative w-full max-w-sm aspect-video rounded-md overflow-hidden border border-border">
+                  <Image src={socialImage || "/placeholder.svg"} alt="Social image preview" fill className="object-cover" />
+                </div>
+              )}
+              <div className="flex items-center gap-3">
+                <MediaUploader accept="image" onUploaded={setSocialImage} label={socialImage ? "Replace image" : "Upload image"} />
+                {socialImage && (
+                  <button type="button" onClick={() => setSocialImage("")} className="text-xs text-red-400 hover:underline">
+                    Remove
+                  </button>
+                )}
+              </div>
+              <span className="text-xs text-cream/40">Defaults to the featured image if left blank.</span>
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* Featured */}
       <label className="flex items-center gap-3 cursor-pointer">
@@ -208,13 +358,15 @@ export function ContentEditor({ initial, defaultType }: Props) {
 
       {/* Actions */}
       <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-border">
-        <button
-          onClick={() => save("published")}
-          disabled={saving !== null}
-          className="rounded-md gold-gradient text-primary-foreground font-medium tracking-wide px-6 py-2.5 hover:opacity-90 transition-opacity disabled:opacity-50"
-        >
-          {saving === "published" ? "Publishing…" : "Publish"}
-        </button>
+        {canPublish && (
+          <button
+            onClick={() => save("published")}
+            disabled={saving !== null}
+            className="rounded-md gold-gradient text-primary-foreground font-medium tracking-wide px-6 py-2.5 hover:opacity-90 transition-opacity disabled:opacity-50"
+          >
+            {saving === "published" ? "Publishing…" : "Publish"}
+          </button>
+        )}
         <button
           onClick={() => save("draft")}
           disabled={saving !== null}
@@ -222,6 +374,11 @@ export function ContentEditor({ initial, defaultType }: Props) {
         >
           {saving === "draft" ? "Saving…" : "Save Draft"}
         </button>
+        {!canPublish && (
+          <span className="text-xs text-cream/40">
+            Your account can save drafts. An administrator can publish them.
+          </span>
+        )}
         <button
           onClick={() => router.push("/admin/dashboard")}
           disabled={saving !== null}
@@ -241,6 +398,13 @@ function GalleryEditor({
   gallery: GalleryImage[]
   setGallery: (g: GalleryImage[]) => void
 }) {
+  function move(from: number, to: number) {
+    if (to < 0 || to >= gallery.length) return
+    const next = [...gallery]
+    const [item] = next.splice(from, 1)
+    next.splice(to, 0, item)
+    setGallery(next)
+  }
   return (
     <div className="flex flex-col gap-3">
       <label className={labelClass}>Photo Gallery</label>
@@ -249,7 +413,7 @@ function GalleryEditor({
           {gallery.map((img, i) => (
             <div key={i} className="flex flex-col gap-1.5">
               <div className="relative aspect-square rounded-md overflow-hidden border border-border">
-                <Image src={img.url} alt={img.alt ?? ""} fill className="object-cover" />
+                <Image src={img.url || "/placeholder.svg"} alt={img.alt ?? ""} fill className="object-cover" />
                 <button
                   type="button"
                   onClick={() => setGallery(gallery.filter((_, idx) => idx !== i))}
@@ -257,6 +421,14 @@ function GalleryEditor({
                 >
                   Remove
                 </button>
+                <div className="absolute bottom-1 left-1 flex gap-1">
+                  <button type="button" onClick={() => move(i, i - 1)} className="rounded bg-background/80 text-cream text-xs px-1.5 py-0.5 hover:bg-background disabled:opacity-30" disabled={i === 0} aria-label="Move left">
+                    ←
+                  </button>
+                  <button type="button" onClick={() => move(i, i + 1)} className="rounded bg-background/80 text-cream text-xs px-1.5 py-0.5 hover:bg-background disabled:opacity-30" disabled={i === gallery.length - 1} aria-label="Move right">
+                    →
+                  </button>
+                </div>
               </div>
               <input
                 value={img.alt ?? ""}

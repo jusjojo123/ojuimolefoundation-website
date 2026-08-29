@@ -120,7 +120,7 @@ export const media = pgTable("media", {
   title: text("title"),
   alt: text("alt"),
   tags: jsonb("tags").$type<string[]>().notNull().default([]),
-  size: serial("size"),
+  size: integer("size"),
   contentType: text("contentType"),
   uploadedById: text("uploadedById"),
   createdAt: timestamp("createdAt").notNull().defaultNow(),

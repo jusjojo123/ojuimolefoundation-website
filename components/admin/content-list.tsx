@@ -7,6 +7,7 @@ import {
   deleteContent,
   setPublishStatus,
   toggleFeatured,
+  type ContentStatus,
 } from "@/app/actions/content"
 import { CONTENT_TYPE_LIST, contentTypeLabel } from "@/lib/content-config"
 import type { Content } from "@/lib/db/schema"
@@ -14,10 +15,12 @@ import type { Content } from "@/lib/db/schema"
 type Props = {
   items: Content[]
   role: "admin" | "editor"
+  canPublish: boolean
+  canDelete: boolean
   filters: { type: string; status: string; q: string }
 }
 
-export function ContentList({ items, role, filters }: Props) {
+export function ContentList({ items, role, canPublish, canDelete, filters }: Props) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const [q, setQ] = useState(filters.q)
@@ -35,6 +38,13 @@ export function ContentList({ items, role, filters }: Props) {
     startTransition(async () => {
       await fn()
       router.refresh()
+    })
+  }
+
+  function changeStatus(id: number, status: ContentStatus) {
+    action(async () => {
+      const res = await setPublishStatus(id, status)
+      if (!res.ok) alert(res.error)
     })
   }
 
@@ -76,6 +86,7 @@ export function ContentList({ items, role, filters }: Props) {
           <option value="all">All statuses</option>
           <option value="published">Published</option>
           <option value="draft">Drafts</option>
+          <option value="archived">Archived</option>
         </select>
       </div>
 
@@ -83,9 +94,6 @@ export function ContentList({ items, role, filters }: Props) {
       {items.length === 0 ? (
         <div className="text-center py-16 border border-dashed border-border rounded-lg">
           <p className="text-cream/50">No content found.</p>
-          <Link href="/admin/dashboard/new" className="text-gold hover:underline text-sm mt-2 inline-block">
-            Create your first item →
-          </Link>
         </div>
       ) : (
         <ul className="flex flex-col gap-2">
@@ -119,21 +127,40 @@ export function ContentList({ items, role, filters }: Props) {
                 >
                   Edit
                 </Link>
-                {item.status === "published" ? (
+                {canPublish && item.status !== "published" && (
                   <button
-                    onClick={() => action(() => setPublishStatus(item.id, "draft"))}
+                    onClick={() => changeStatus(item.id, "published")}
+                    disabled={isPending}
+                    className="text-sm text-gold hover:opacity-80 transition-opacity px-2 disabled:opacity-50"
+                  >
+                    Publish
+                  </button>
+                )}
+                {canPublish && item.status === "published" && (
+                  <button
+                    onClick={() => changeStatus(item.id, "draft")}
                     disabled={isPending}
                     className="text-sm text-cream/70 hover:text-gold transition-colors px-2 disabled:opacity-50"
                   >
                     Unpublish
                   </button>
-                ) : (
+                )}
+                {canPublish && item.status !== "archived" && (
                   <button
-                    onClick={() => action(() => setPublishStatus(item.id, "published"))}
+                    onClick={() => changeStatus(item.id, "archived")}
                     disabled={isPending}
-                    className="text-sm text-gold hover:opacity-80 transition-opacity px-2 disabled:opacity-50"
+                    className="text-sm text-cream/50 hover:text-cream transition-colors px-2 disabled:opacity-50"
                   >
-                    Publish
+                    Archive
+                  </button>
+                )}
+                {canPublish && item.status === "archived" && (
+                  <button
+                    onClick={() => changeStatus(item.id, "draft")}
+                    disabled={isPending}
+                    className="text-sm text-cream/70 hover:text-gold transition-colors px-2 disabled:opacity-50"
+                  >
+                    Restore
                   </button>
                 )}
                 <button
@@ -143,11 +170,14 @@ export function ContentList({ items, role, filters }: Props) {
                 >
                   {item.featured ? "Unfeature" : "Feature"}
                 </button>
-                {role === "admin" && (
+                {canDelete && (
                   <button
                     onClick={() => {
                       if (confirm(`Delete "${item.title}"? This cannot be undone.`)) {
-                        action(() => deleteContent(item.id))
+                        action(async () => {
+                          const res = await deleteContent(item.id)
+                          if (!res.ok && res.error) alert(res.error)
+                        })
                       }
                     }}
                     disabled={isPending}
@@ -166,14 +196,15 @@ export function ContentList({ items, role, filters }: Props) {
 }
 
 function StatusBadge({ status }: { status: string }) {
-  const published = status === "published"
+  const styles: Record<string, string> = {
+    published: "text-green-400 bg-green-500/10",
+    draft: "text-cream/50 bg-muted",
+    archived: "text-amber-400/80 bg-amber-500/10",
+  }
+  const label = status.charAt(0).toUpperCase() + status.slice(1)
   return (
-    <span
-      className={`text-[10px] uppercase tracking-wider rounded px-1.5 py-0.5 ${
-        published ? "text-green-400 bg-green-500/10" : "text-cream/50 bg-muted"
-      }`}
-    >
-      {published ? "Published" : "Draft"}
+    <span className={`text-[10px] uppercase tracking-wider rounded px-1.5 py-0.5 ${styles[status] ?? styles.draft}`}>
+      {label}
     </span>
   )
 }
