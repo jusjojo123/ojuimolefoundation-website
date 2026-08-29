@@ -21,6 +21,28 @@ function countryLabel(code: string): string {
   return COUNTRY_NAMES[code] ?? code
 }
 
+/** Single headline metric card. */
+export function StatCard({ label, value }: { label: string; value: number | string }) {
+  return (
+    <div className="rounded-xl border border-gold/10 bg-background/40 p-5">
+      <p className="text-sm text-cream/50">{label}</p>
+      <p className="mt-2 font-heading text-3xl text-cream tabular-nums">
+        {typeof value === "number" ? value.toLocaleString() : value}
+      </p>
+    </div>
+  )
+}
+
+/** Framed daily-views trend chart with a heading. */
+export function ViewsTrend({ data }: { data: { date: string; views: number }[] }) {
+  return (
+    <div className="rounded-xl border border-gold/10 bg-background/40 p-5">
+      <h3 className="font-heading text-lg text-cream mb-4">Page views over time</h3>
+      <ViewsSparkline data={data} />
+    </div>
+  )
+}
+
 /** Data-driven line chart built from real daily view counts. */
 export function ViewsSparkline({ data }: { data: { date: string; views: number }[] }) {
   if (data.length === 0) return null
