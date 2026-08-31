@@ -32,10 +32,14 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
       role: userTable.role,
       canPublish: userTable.canPublish,
       canDelete: userTable.canDelete,
+      isActive: userTable.isActive,
     })
     .from(userTable)
     .where(eq(userTable.id, u.id))
     .limit(1)
+
+  // A deactivated (un-approved) account has no admin access at all.
+  if (row && row.isActive === false) return null
 
   const role = ((row?.role as Role) ?? (u.role as Role) ?? "editor") as Role
   const isAdmin = role === "admin"

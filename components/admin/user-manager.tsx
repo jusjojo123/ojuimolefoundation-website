@@ -7,6 +7,7 @@ import {
   deleteUser,
   updateUserRole,
   updateUserPermissions,
+  setUserActive,
 } from "@/app/actions/users"
 
 type UserRow = {
@@ -16,6 +17,7 @@ type UserRow = {
   role: string
   canPublish: boolean
   canDelete: boolean
+  isActive: boolean
   createdAt: Date | string
 }
 
@@ -88,6 +90,11 @@ export function UserManager({ users, currentUserId }: { users: UserRow[]; curren
               <div className="flex-1 min-w-0">
                 <p className="text-cream truncate">
                   {u.name} {isSelf && <span className="text-xs text-gold/60">(you)</span>}
+                  {!u.isActive && (
+                    <span className="ml-2 rounded-full bg-red-500/15 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-red-400">
+                      Deactivated
+                    </span>
+                  )}
                 </p>
                 <p className="text-xs text-cream/40 truncate">{u.email}</p>
               </div>
@@ -106,6 +113,21 @@ export function UserManager({ users, currentUserId }: { users: UserRow[]; curren
                   <option value="editor">Editor</option>
                   <option value="admin">Admin</option>
                 </select>
+                {!isSelf && (
+                  <button
+                    onClick={() =>
+                      startTransition(async () => {
+                        const res = await setUserActive(u.id, !u.isActive)
+                        if (!res.ok) alert(res.error)
+                        refresh()
+                      })
+                    }
+                    disabled={isPending}
+                    className="text-sm text-cream/70 hover:text-gold transition-colors disabled:opacity-50"
+                  >
+                    {u.isActive ? "Deactivate" : "Activate"}
+                  </button>
+                )}
                 {!isSelf && (
                   <button
                     onClick={() => {

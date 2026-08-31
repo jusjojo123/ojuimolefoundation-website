@@ -132,6 +132,33 @@ export async function updateUserPermissions(
   return { ok: true }
 }
 
+/** Admin-only: activate/deactivate a user. Cannot deactivate yourself or the last admin. */
+export async function setUserActive(userId: string, isActive: boolean): Promise<SimpleResult> {
+  const current = await getCurrentUser()
+  if (!current) return { ok: false, error: "Unauthorized" }
+  if (current.role !== "admin") return { ok: false, error: "Only admins can change account status." }
+  if (userId === current.id) return { ok: false, error: "You cannot deactivate your own account." }
+
+  if (!isActive) {
+    const [{ admins }] = await db
+      .select({ admins: sql<number>`count(*)::int` })
+      .from(userTable)
+      .where(eq(userTable.role, "admin"))
+    const [target] = await db
+      .select({ role: userTable.role })
+      .from(userTable)
+      .where(eq(userTable.id, userId))
+      .limit(1)
+    if (target?.role === "admin" && admins <= 1) {
+      return { ok: false, error: "Cannot deactivate the last remaining admin." }
+    }
+  }
+
+  await db.update(userTable).set({ isActive }).where(eq(userTable.id, userId))
+  revalidatePath("/admin/dashboard/users")
+  return { ok: true }
+}
+
 /** Admin-only: delete a user. Cannot delete yourself or the last admin. */
 export async function deleteUser(userId: string): Promise<SimpleResult> {
   const current = await getCurrentUser()
@@ -168,6 +195,7 @@ export async function listUsers() {
       role: userTable.role,
       canPublish: userTable.canPublish,
       canDelete: userTable.canDelete,
+      isActive: userTable.isActive,
       createdAt: userTable.createdAt,
     })
     .from(userTable)

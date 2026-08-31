@@ -22,6 +22,8 @@ export const user = pgTable("user", {
   // Per-editor permission flags (admins always have both regardless).
   canPublish: boolean("canPublish").notNull().default(false),
   canDelete: boolean("canDelete").notNull().default(false),
+  // Deactivated accounts keep their data but lose all admin access.
+  isActive: boolean("isActive").notNull().default(true),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
 })

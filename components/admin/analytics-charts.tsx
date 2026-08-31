@@ -70,15 +70,15 @@ export function ViewsSparkline({ data }: { data: { date: string; views: number }
       >
         <defs>
           <linearGradient id="viewsFill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="var(--gold)" stopOpacity="0.35" />
-            <stop offset="100%" stopColor="var(--gold)" stopOpacity="0" />
+            <stop offset="0%" stopColor="var(--color-gold)" stopOpacity="0.35" />
+            <stop offset="100%" stopColor="var(--color-gold)" stopOpacity="0" />
           </linearGradient>
         </defs>
         <polygon points={area} fill="url(#viewsFill)" />
         <polyline
           points={line}
           fill="none"
-          stroke="var(--gold)"
+          stroke="var(--color-gold)"
           strokeWidth={2}
           strokeLinejoin="round"
           strokeLinecap="round"

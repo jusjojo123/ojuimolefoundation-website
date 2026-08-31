@@ -78,18 +78,15 @@ export default async function AnalyticsPage({
           <ViewsTrend data={data.viewsByDay} />
 
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            <BarList title="Top pages" items={data.topPages.map((p) => ({ label: p.path, value: p.views }))} />
+            <BarList title="Top pages" items={data.topPages.map((p) => ({ label: p.path, views: p.views }))} />
             <BarList
               title="Traffic sources"
-              items={data.topSources.map((s) => ({ label: s.source, value: s.views }))}
+              items={data.topSources.map((s) => ({ label: s.source, views: s.views }))}
             />
-            <BarList
-              title="Countries"
-              items={data.topCountries.map((c) => ({ label: c.country, value: c.views }))}
-            />
+            <CountryList data={data.topCountries} />
             <BarList
               title="Devices"
-              items={data.devices.map((d) => ({ label: d.device, value: d.views }))}
+              items={data.devices.map((d) => ({ label: d.device, views: d.views }))}
             />
           </div>
         </>
