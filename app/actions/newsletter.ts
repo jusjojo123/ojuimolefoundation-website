@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db"
 import { newsletterSubscriber } from "@/lib/db/schema"
-import { requireUser } from "@/lib/auth-helpers"
+import { requireAdmin } from "@/lib/auth-helpers"
 import { desc, eq, sql } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 
@@ -33,15 +33,15 @@ export async function subscribe(formData: FormData) {
   }
 }
 
-/** Admin: list all subscribers. */
+/** Admin-only: list all subscribers (contains PII — never expose to editors/public). */
 export async function listSubscribers() {
-  await requireUser()
+  await requireAdmin()
   return db.select().from(newsletterSubscriber).orderBy(desc(newsletterSubscriber.createdAt))
 }
 
-/** Admin: subscriber counts by status. */
+/** Admin-only: subscriber counts by status. */
 export async function subscriberStats() {
-  await requireUser()
+  await requireAdmin()
   const rows = await db
     .select({ status: newsletterSubscriber.status, count: sql<number>`count(*)::int` })
     .from(newsletterSubscriber)
@@ -55,12 +55,9 @@ export async function subscriberStats() {
   return stats
 }
 
-/** Admin: remove a subscriber. */
+/** Admin-only: remove a subscriber. */
 export async function removeSubscriber(id: number) {
-  const user = await requireUser()
-  if (user.role !== "admin" && !user.canDelete) {
-    return { ok: false as const, error: "Not permitted." }
-  }
+  await requireAdmin()
   await db.delete(newsletterSubscriber).where(eq(newsletterSubscriber.id, id))
   revalidatePath("/admin/dashboard/newsletter")
   return { ok: true as const }
