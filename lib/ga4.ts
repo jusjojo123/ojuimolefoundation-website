@@ -44,20 +44,75 @@ function normalizePrivateKey(raw: string): string {
  * GA4_PRIVATE_KEY fields. The numeric property ID always comes from
  * GA4_PROPERTY_ID (or the JSON if it carries one).
  */
+/**
+ * Parse a service-account JSON blob tolerantly. Handles the common paste
+ * mistakes: outer braces dropped, the whole thing wrapped in extra quotes, or
+ * leading/trailing whitespace. Returns the two fields we need, or null.
+ */
+function parseServiceAccountBlob(
+  raw: string,
+): { clientEmail: string; privateKey: string } | null {
+  let text = raw.trim()
+
+  // Strip one layer of accidental wrapping quotes.
+  if ((text.startsWith('"') && text.endsWith('"')) || (text.startsWith("'") && text.endsWith("'"))) {
+    text = text.slice(1, -1).trim()
+  }
+
+  // Preferred, corruption-proof form: the whole JSON file base64-encoded.
+  // A base64 blob has no braces/quotes/newlines to mangle on paste.
+  if (!text.startsWith("{") && /^[A-Za-z0-9+/=\s]+$/.test(text) && text.length > 100) {
+    try {
+      const decoded = Buffer.from(text.replace(/\s/g, ""), "base64").toString("utf8")
+      if (decoded.includes("private_key")) {
+        text = decoded.trim()
+      }
+    } catch {
+      // Not valid base64 — continue with the raw text.
+    }
+  }
+
+  // Re-add outer braces if they were dropped during paste.
+  if (!text.startsWith("{")) text = `{${text}`
+  if (!text.endsWith("}")) text = `${text}}`
+
+  const tryParse = (s: string) => {
+    try {
+      return JSON.parse(s) as Record<string, unknown>
+    } catch {
+      return null
+    }
+  }
+
+  let parsed = tryParse(text)
+
+  // Fallback: pull the two fields directly with regex if JSON is still invalid.
+  if (!parsed) {
+    const emailMatch = text.match(/"client_email"\s*:\s*"([^"]+)"/)
+    const keyMatch = text.match(/"private_key"\s*:\s*"((?:\\.|[^"\\])*)"/)
+    if (emailMatch && keyMatch) {
+      parsed = { client_email: emailMatch[1], private_key: keyMatch[1] }
+    }
+  }
+
+  if (!parsed) return null
+
+  const clientEmail = typeof parsed.client_email === "string" ? parsed.client_email : ""
+  const privateKey = normalizePrivateKey(
+    typeof parsed.private_key === "string" ? parsed.private_key : "",
+  )
+  if (!clientEmail || !privateKey) return null
+  return { clientEmail, privateKey }
+}
+
 function resolveCredentials(): Ga4Credentials | null {
   const propertyId = (process.env.GA4_PROPERTY_ID ?? "").replace(/\D/g, "")
 
   const jsonBlob = process.env.GA4_CREDENTIALS_JSON
   if (jsonBlob && jsonBlob.trim()) {
-    try {
-      const parsed = JSON.parse(jsonBlob)
-      const clientEmail = parsed.client_email ?? ""
-      const privateKey = normalizePrivateKey(parsed.private_key ?? "")
-      if (clientEmail && privateKey && propertyId) {
-        return { clientEmail, privateKey, propertyId }
-      }
-    } catch {
-      // Malformed JSON — fall through to individual fields.
+    const fromJson = parseServiceAccountBlob(jsonBlob)
+    if (fromJson && propertyId) {
+      return { ...fromJson, propertyId }
     }
   }
 
