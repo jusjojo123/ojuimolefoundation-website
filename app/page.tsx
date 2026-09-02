@@ -16,6 +16,11 @@ import { NewsletterSignup } from "@/components/public/newsletter-signup";
 import { Footer } from "@/components/footer";
 import { EditRoot } from "@/components/edit/edit-root";
 
+// CMS-driven content is invalidated on-demand via revalidatePath("/") in the
+// edit/leadership actions; this interval is a safety net so edits always
+// appear within a minute even if an on-demand revalidation is missed.
+export const revalidate = 60;
+
 export default function Home() {
   return (
     <EditRoot>
