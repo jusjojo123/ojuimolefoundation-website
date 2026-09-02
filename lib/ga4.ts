@@ -18,23 +18,70 @@ export type Ga4Response =
   | { status: "error"; message: string }
   | { status: "ok"; data: Ga4Summary }
 
-/** True only when all three GA4 Data API credentials are present. */
+type Ga4Credentials = {
+  clientEmail: string
+  privateKey: string
+  propertyId: string
+}
+
+function stripWrappingQuotes(value: string): string {
+  const v = value.trim()
+  if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) {
+    return v.slice(1, -1)
+  }
+  return v
+}
+
+function normalizePrivateKey(raw: string): string {
+  // Env vars store the key with literal "\n"; convert back to real newlines.
+  return stripWrappingQuotes(raw).replace(/\\n/g, "\n").trim()
+}
+
+/**
+ * Resolve GA4 credentials. Preferred source is a full service-account JSON blob
+ * in GA4_CREDENTIALS_JSON (paste the entire key file — nothing to hand-copy, so
+ * it can't be corrupted). Falls back to the individual GA4_CLIENT_EMAIL and
+ * GA4_PRIVATE_KEY fields. The numeric property ID always comes from
+ * GA4_PROPERTY_ID (or the JSON if it carries one).
+ */
+function resolveCredentials(): Ga4Credentials | null {
+  const propertyId = (process.env.GA4_PROPERTY_ID ?? "").replace(/\D/g, "")
+
+  const jsonBlob = process.env.GA4_CREDENTIALS_JSON
+  if (jsonBlob && jsonBlob.trim()) {
+    try {
+      const parsed = JSON.parse(jsonBlob)
+      const clientEmail = parsed.client_email ?? ""
+      const privateKey = normalizePrivateKey(parsed.private_key ?? "")
+      if (clientEmail && privateKey && propertyId) {
+        return { clientEmail, privateKey, propertyId }
+      }
+    } catch {
+      // Malformed JSON — fall through to individual fields.
+    }
+  }
+
+  const clientEmail = process.env.GA4_CLIENT_EMAIL ?? ""
+  const privateKey = normalizePrivateKey(process.env.GA4_PRIVATE_KEY ?? "")
+  if (clientEmail && privateKey && propertyId) {
+    return { clientEmail, privateKey, propertyId }
+  }
+
+  return null
+}
+
+/** True only when a usable set of GA4 Data API credentials is present. */
 export function isGa4Configured(): boolean {
-  return Boolean(
-    process.env.GA4_PROPERTY_ID &&
-      process.env.GA4_CLIENT_EMAIL &&
-      process.env.GA4_PRIVATE_KEY,
-  )
+  return resolveCredentials() !== null
 }
 
 let cachedClient: BetaAnalyticsDataClient | null = null
-function getClient(): BetaAnalyticsDataClient {
+function getClient(creds: Ga4Credentials): BetaAnalyticsDataClient {
   if (cachedClient) return cachedClient
   cachedClient = new BetaAnalyticsDataClient({
     credentials: {
-      client_email: process.env.GA4_CLIENT_EMAIL,
-      // Vercel stores the key with literal "\n"; convert back to real newlines.
-      private_key: process.env.GA4_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+      client_email: creds.clientEmail,
+      private_key: creds.privateKey,
     },
   })
   return cachedClient
@@ -58,21 +105,14 @@ function num(v: string | null | undefined): number {
  * instead of fake numbers.
  */
 export async function getGa4Summary(days = 30): Promise<Ga4Response> {
-  if (!isGa4Configured()) return { status: "not_configured" }
+  const creds = resolveCredentials()
+  if (!creds) return { status: "not_configured" }
 
-  const propertyId = process.env.GA4_PROPERTY_ID!.replace(/\D/g, "")
-  if (!propertyId) {
-    return {
-      status: "error",
-      message: "GA4_PROPERTY_ID must be the numeric property ID (digits only).",
-    }
-  }
-
-  const property = `properties/${propertyId}`
+  const property = `properties/${creds.propertyId}`
   const dateRanges = [{ startDate: `${days - 1}daysAgo`, endDate: "today" }]
 
   try {
-    const client = getClient()
+    const client = getClient(creds)
 
     const [byDay, pages, sources, countries, devices, totals] = await Promise.all([
       client.runReport({
