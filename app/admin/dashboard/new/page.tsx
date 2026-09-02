@@ -7,7 +7,7 @@ export default async function NewContentPage({
 }: {
   searchParams: Promise<{ type?: string }>
 }) {
-  await requireUser()
+  const user = await requireUser()
   const sp = await searchParams
 
   return (
@@ -18,7 +18,7 @@ export default async function NewContentPage({
           Fill in the details, then save as a draft or publish immediately.
         </p>
       </div>
-      <ContentEditor defaultType={(sp.type as ContentType) ?? undefined} />
+      <ContentEditor defaultType={(sp.type as ContentType) ?? undefined} canPublish={user.canPublish} />
     </div>
   )
 }

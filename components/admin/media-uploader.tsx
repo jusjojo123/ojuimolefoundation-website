@@ -1,20 +1,18 @@
 "use client"
 
 import { useRef, useState } from "react"
-import { upload } from "@vercel/blob/client"
+import { uploadFile, ACCEPT_MAP, type UploadKind } from "@/lib/upload-client"
+import { saveMedia } from "@/app/actions/media"
 
 type Props = {
-  accept: "image" | "video"
+  accept: UploadKind
   onUploaded: (url: string) => void
   label?: string
+  /** When true, also register the upload in the shared media library. */
+  addToLibrary?: boolean
 }
 
-const ACCEPT_MAP = {
-  image: "image/jpeg,image/png,image/webp,image/gif,image/avif",
-  video: "video/mp4,video/webm,video/quicktime,video/ogg",
-}
-
-export function MediaUploader({ accept, onUploaded, label }: Props) {
+export function MediaUploader({ accept, onUploaded, label, addToLibrary = true }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -26,11 +24,18 @@ export function MediaUploader({ accept, onUploaded, label }: Props) {
     setUploading(true)
 
     try {
-      const blob = await upload(file.name, file, {
-        access: "public",
-        handleUploadUrl: "/api/upload",
-      })
-      onUploaded(blob.url)
+      const url = await uploadFile(file)
+      onUploaded(url)
+      if (addToLibrary) {
+        // Fire-and-forget: registering in the library shouldn't block the form.
+        saveMedia({
+          url,
+          kind: accept,
+          filename: file.name,
+          contentType: file.type,
+          size: file.size,
+        }).catch((err) => console.log("[v0] saveMedia error:", err))
+      }
     } catch (err) {
       console.log("[v0] upload client error:", err)
       setError("Upload failed. Please try again.")

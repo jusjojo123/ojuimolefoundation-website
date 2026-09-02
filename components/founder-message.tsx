@@ -1,6 +1,12 @@
 import Image from "next/image";
+import { getSiteContentMap, resolve } from "@/lib/site-content";
+import { EditableText } from "@/components/edit/editable-text";
+import { EditableImage } from "@/components/edit/editable-image";
 
-export function FounderMessage() {
+export async function FounderMessage() {
+  const c = await getSiteContentMap();
+  const photo = resolve(c, "founder.photo", "/images/founder-jolene-smart-new.jpg");
+
   return (
     <section className="py-24 lg:py-32 bg-background relative overflow-hidden">
       {/* Subtle Background */}
@@ -11,43 +17,77 @@ export function FounderMessage() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center">
           {/* Section Header */}
-          <span className="text-gold/70 text-sm tracking-[0.3em] uppercase mb-4 block">
-            From Our Founder
-          </span>
-          <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl text-cream tracking-wide mb-6">
-            A Message of Purpose
-          </h2>
+          <EditableText
+            contentKey="founder.eyebrow"
+            as="span"
+            label="Eyebrow"
+            value={resolve(c, "founder.eyebrow", "From Our Founder")}
+            className="text-gold/70 text-sm tracking-[0.3em] uppercase mb-4 block"
+          />
+          <EditableText
+            contentKey="founder.heading"
+            as="h2"
+            label="Heading"
+            value={resolve(c, "founder.heading", "A Message of Purpose")}
+            className="font-heading text-3xl sm:text-4xl lg:text-5xl text-cream tracking-wide mb-6"
+          />
           <div className="w-24 h-px bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-12" />
 
-          {/* Founder Photo - Square frame with gold border, full head wrap visible */}
-          <div className="w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 mx-auto mb-10 relative rounded-2xl overflow-hidden border-4 border-gold shadow-[0_0_40px_rgba(212,175,55,0.25)]">
+          {/* Founder Photo */}
+          <EditableImage
+            contentKey="founder.photo"
+            label="Change founder photo"
+            className="w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 mx-auto mb-10 relative rounded-2xl overflow-hidden border-4 border-gold shadow-[0_0_40px_rgba(212,175,55,0.25)]"
+          >
             <Image
-              src="/images/founder-jolene-smart-new.jpg"
-              alt="Ifagbejami Jolene Smart, Founder and Executive Director"
+              src={photo || "/placeholder.svg"}
+              alt="Ifagbejami Jolene Smart, Founder and Chief Executive Director"
               width={600}
               height={600}
               className="w-full h-full object-cover object-[50%_15%]"
               priority
             />
-          </div>
+          </EditableImage>
 
           {/* Quote */}
           <div className="max-w-3xl mx-auto">
             <svg className="w-10 h-10 text-gold/30 mx-auto mb-6" fill="currentColor" viewBox="0 0 24 24">
               <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
             </svg>
-            <p className="text-cream/80 text-lg lg:text-xl leading-relaxed mb-6 italic">
-              Our foundation was born from a deep reverence for cultural heritage and a burning desire to preserve the sacred traditions that connect us to our ancestors. Every story we document, every community we serve, and every young person we inspire brings us closer to fulfilling our mission of illuminating culture and empowering generations.
-            </p>
-            <p className="text-cream/70 text-base lg:text-lg leading-relaxed mb-8">
-              In Trinidad and Tobago, we have witnessed the beauty of diverse traditions coming together. It is this spirit of unity and cultural pride that drives our work. Through media, education, and humanitarian service, we are building bridges between the past and the future.
-            </p>
+            <EditableText
+              contentKey="founder.quote1"
+              as="p"
+              multiline
+              label="Message paragraph 1"
+              value={resolve(c, "founder.quote1", "Our foundation was born from a deep reverence for cultural heritage and a burning desire to preserve the sacred traditions that connect us to our ancestors. Every story we document, every community we serve, and every young person we inspire brings us closer to fulfilling our mission of illuminating culture and empowering generations.")}
+              className="text-cream/80 text-lg lg:text-xl leading-relaxed mb-6 italic"
+            />
+            <EditableText
+              contentKey="founder.quote2"
+              as="p"
+              multiline
+              label="Message paragraph 2"
+              value={resolve(c, "founder.quote2", "In Trinidad and Tobago, we have witnessed the beauty of diverse traditions coming together. It is this spirit of unity and cultural pride that drives our work. Through media, education, and humanitarian service, we are building bridges between the past and the future.")}
+              className="text-cream/70 text-base lg:text-lg leading-relaxed mb-8"
+            />
           </div>
 
           {/* Founder Info */}
           <div className="border-t border-gold/10 pt-6 inline-block">
-            <p className="font-heading text-xl text-gold tracking-wide">Ifagbejami Jolene Smart</p>
-            <p className="text-cream/50 text-sm tracking-wider">Founder and Executive Director</p>
+            <EditableText
+              contentKey="founder.name"
+              as="p"
+              label="Founder name"
+              value={resolve(c, "founder.name", "Ifagbejami Jolene Smart")}
+              className="font-heading text-xl text-gold tracking-wide"
+            />
+            <EditableText
+              contentKey="founder.role"
+              as="p"
+              label="Founder role"
+              value={resolve(c, "founder.role", "Founder and Chief Executive Director")}
+              className="text-cream/50 text-sm tracking-wider"
+            />
           </div>
         </div>
       </div>
