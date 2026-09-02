@@ -21,8 +21,8 @@
   --color-earth: #5c4a32;
   --color-amber: #b8860b;
 
-  --font-sans: "Cormorant Garamond", serif;
-  --font-heading: "Cinzel", serif;
+  --font-sans: var(--font-body-src), "Cormorant Garamond", "Times New Roman", serif;
+  --font-heading: var(--font-heading-src), "Cormorant Garamond", "Times New Roman", serif;
 
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;

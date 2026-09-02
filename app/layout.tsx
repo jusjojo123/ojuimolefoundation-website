@@ -8,14 +8,14 @@ import "./globals.css";
 const cinzel = Cormorant_SC({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
-  variable: "--font-heading",
+  variable: "--font-heading-src",
   display: "swap",
 });
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-sans",
+  variable: "--font-body-src",
   display: "swap",
 });
 
