@@ -1,5 +1,8 @@
 import "server-only"
 import { auth } from "@/lib/auth"
+import { db } from "@/lib/db"
+import { user as userTable } from "@/lib/db/schema"
+import { eq } from "drizzle-orm"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 
@@ -10,6 +13,10 @@ export type CurrentUser = {
   name: string
   email: string
   role: Role
+  /** Whether this user may publish/unpublish/archive content. Admins: always true. */
+  canPublish: boolean
+  /** Whether this user may delete content. Admins: always true. */
+  canDelete: boolean
 }
 
 /** Returns the current session user, or null if not signed in. */
@@ -17,11 +24,33 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
   const session = await auth.api.getSession({ headers: await headers() })
   if (!session?.user) return null
   const u = session.user as typeof session.user & { role?: string }
+
+  // Fetch role + permission flags fresh from the DB so admin changes take
+  // effect immediately without waiting for a new session.
+  const [row] = await db
+    .select({
+      role: userTable.role,
+      canPublish: userTable.canPublish,
+      canDelete: userTable.canDelete,
+      isActive: userTable.isActive,
+    })
+    .from(userTable)
+    .where(eq(userTable.id, u.id))
+    .limit(1)
+
+  // A deactivated (un-approved) account has no admin access at all.
+  if (row && row.isActive === false) return null
+
+  const role = ((row?.role as Role) ?? (u.role as Role) ?? "editor") as Role
+  const isAdmin = role === "admin"
+
   return {
     id: u.id,
     name: u.name,
     email: u.email,
-    role: (u.role as Role) ?? "editor",
+    role,
+    canPublish: isAdmin || (row?.canPublish ?? false),
+    canDelete: isAdmin || (row?.canDelete ?? false),
   }
 }
 

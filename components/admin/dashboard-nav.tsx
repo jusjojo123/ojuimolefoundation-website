@@ -7,7 +7,11 @@ type NavItem = { href: string; label: string; adminOnly?: boolean }
 
 const NAV: NavItem[] = [
   { href: "/admin/dashboard", label: "Overview" },
+  { href: "/admin/dashboard/analytics", label: "Analytics", adminOnly: true },
   { href: "/admin/dashboard/new", label: "New Content" },
+  { href: "/admin/dashboard/media", label: "Media Library" },
+  { href: "/admin/dashboard/team", label: "Directors / Leadership" },
+  { href: "/admin/dashboard/newsletter", label: "Newsletter", adminOnly: true },
   { href: "/admin/dashboard/users", label: "Team & Roles", adminOnly: true },
 ]
 
@@ -18,7 +22,7 @@ export function DashboardNav({ role }: { role: "admin" | "editor" }) {
     <nav className="flex flex-col gap-1">
       {NAV.filter((item) => !item.adminOnly || role === "admin").map((item) => {
         const active =
-          item.href === "/admin/dashboard"
+          item.href === "/admin/dashboard" || item.href === "/admin/dashboard/new"
             ? pathname === item.href
             : pathname.startsWith(item.href)
         return (
