@@ -6,6 +6,7 @@ import Image from "next/image"
 import { saveContent } from "@/app/actions/content"
 import { MediaUploader } from "@/components/admin/media-uploader"
 import { RichTextEditor } from "@/components/admin/rich-text-editor"
+import { VideoEmbed } from "@/components/public/video-embed"
 import {
   CONTENT_TYPES,
   CONTENT_TYPE_LIST,
@@ -164,10 +165,22 @@ export function ContentEditor({ initial, defaultType, canPublish = true }: Props
         </div>
       )}
 
+      {/* Media section heading */}
+      {(fields.coverImage || fields.videoUrl || fields.audioUrl || fields.documentUrl) && (
+        <div className="flex flex-col gap-1 pt-2 border-t border-border">
+          <h2 className="text-sm font-medium tracking-wide text-gold/80">Media</h2>
+          <p className="text-xs text-cream/40">
+            Upload a file or paste a link. A preview appears below so you can check it before publishing.
+          </p>
+        </div>
+      )}
+
       {/* Cover image */}
       {fields.coverImage && (
         <div className="flex flex-col gap-2">
-          <label className={labelClass}>{type === "gallery" ? "Photo" : "Featured Image"}</label>
+          <label className={labelClass}>
+            {type === "gallery" ? "Photo" : "Cover / Thumbnail Image"}
+          </label>
           {coverImage && (
             <div className="relative w-full max-w-sm aspect-video rounded-md overflow-hidden border border-border">
               <Image src={coverImage || "/placeholder.svg"} alt="Cover preview" fill className="object-cover" />
@@ -188,9 +201,34 @@ export function ContentEditor({ initial, defaultType, canPublish = true }: Props
       {fields.videoUrl && (
         <div className="flex flex-col gap-2">
           <label className={labelClass}>Video</label>
-          <input value={videoUrl} onChange={(e) => setVideoUrl(e.target.value)} className={inputClass} placeholder="Paste a YouTube/Vimeo URL, or upload a file" />
-          <MediaUploader accept="video" onUploaded={setVideoUrl} label="Upload video file" />
-          {videoUrl && <span className="text-xs text-cream/40 break-all">{videoUrl}</span>}
+          <input
+            value={videoUrl}
+            onChange={(e) => setVideoUrl(e.target.value)}
+            className={inputClass}
+            placeholder="Paste a YouTube or Vimeo link (embed)"
+          />
+          <div className="flex items-center gap-3">
+            <MediaUploader
+              accept="video"
+              onUploaded={setVideoUrl}
+              label={videoUrl ? "Replace with uploaded video" : "Or upload a video file"}
+            />
+            {videoUrl && (
+              <button
+                type="button"
+                onClick={() => setVideoUrl("")}
+                className="text-xs text-red-400 hover:underline"
+              >
+                Remove video
+              </button>
+            )}
+          </div>
+          {videoUrl && (
+            <div className="mt-1 max-w-lg">
+              <VideoEmbed url={videoUrl} title={title || "Video preview"} />
+              <span className="mt-1.5 block text-xs text-cream/40 break-all">{videoUrl}</span>
+            </div>
+          )}
         </div>
       )}
 

@@ -1,4 +1,5 @@
 import "server-only"
+import { createPrivateKey } from "node:crypto"
 import { BetaAnalyticsDataClient } from "@google-analytics/data"
 
 export type Ga4Summary = {
@@ -35,6 +36,19 @@ function stripWrappingQuotes(value: string): string {
 function normalizePrivateKey(raw: string): string {
   // Env vars store the key with literal "\n"; convert back to real newlines.
   return stripWrappingQuotes(raw).replace(/\\n/g, "\n").trim()
+}
+
+// A real PEM private key must decode cleanly. Values that were mangled during a
+// multi-line copy/paste (stray quotes/commas leaking into the base64 body) fail
+// here, so we can skip them instead of handing a broken key to the GA4 client.
+function isUsablePrivateKey(pem: string): boolean {
+  if (!pem.includes("BEGIN PRIVATE KEY")) return false
+  try {
+    createPrivateKey({ key: pem, format: "pem" })
+    return true
+  } catch {
+    return false
+  }
 }
 
 /**
@@ -101,24 +115,32 @@ function parseServiceAccountBlob(
   const privateKey = normalizePrivateKey(
     typeof parsed.private_key === "string" ? parsed.private_key : "",
   )
-  if (!clientEmail || !privateKey) return null
+  if (!clientEmail || !isUsablePrivateKey(privateKey)) return null
   return { clientEmail, privateKey }
 }
 
+// Candidate env vars that may hold a full service-account JSON (raw or base64).
+// GA4_CREDENTIALS_JSON is the documented one; the others are checked as a
+// convenience in case the blob was pasted into a differently named var.
+const JSON_CREDENTIAL_ENV_VARS = ["GA4_CREDENTIALS_JSON", "GA4_SERVICE_ACCOUNT", "PRIVATE_KEY"] as const
+
 function resolveCredentials(): Ga4Credentials | null {
   const propertyId = (process.env.GA4_PROPERTY_ID ?? "").replace(/\D/g, "")
+  if (!propertyId) return null
 
-  const jsonBlob = process.env.GA4_CREDENTIALS_JSON
-  if (jsonBlob && jsonBlob.trim()) {
-    const fromJson = parseServiceAccountBlob(jsonBlob)
-    if (fromJson && propertyId) {
-      return { ...fromJson, propertyId }
+  // 1. Preferred: a full service-account JSON blob (base64 or raw JSON).
+  for (const name of JSON_CREDENTIAL_ENV_VARS) {
+    const blob = process.env[name]
+    if (blob && blob.trim()) {
+      const fromJson = parseServiceAccountBlob(blob)
+      if (fromJson) return { ...fromJson, propertyId }
     }
   }
 
+  // 2. Fallback: individual fields, only if the key is genuinely valid.
   const clientEmail = process.env.GA4_CLIENT_EMAIL ?? ""
   const privateKey = normalizePrivateKey(process.env.GA4_PRIVATE_KEY ?? "")
-  if (clientEmail && privateKey && propertyId) {
+  if (clientEmail && isUsablePrivateKey(privateKey)) {
     return { clientEmail, privateKey, propertyId }
   }
 
