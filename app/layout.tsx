@@ -1,18 +1,21 @@
 import type { Metadata, Viewport } from "next";
-import { Cinzel, Cormorant_Garamond } from "next/font/google";
+import { Cormorant_SC, Cormorant_Garamond } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { Suspense } from "react";
+import { AnalyticsTracker } from "@/components/analytics-tracker";
 import "./globals.css";
 
-const cinzel = Cinzel({
+const cinzel = Cormorant_SC({
   subsets: ["latin"],
-  variable: "--font-heading",
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-heading-src",
   display: "swap",
 });
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-sans",
+  variable: "--font-body-src",
   display: "swap",
 });
 
@@ -130,6 +133,9 @@ export default function RootLayout({
           }}
         />
         {children}
+        <Suspense fallback={null}>
+          <AnalyticsTracker />
+        </Suspense>
       </body>
       {gaId ? <GoogleAnalytics gaId={gaId} /> : null}
     </html>
