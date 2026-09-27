@@ -41,7 +41,7 @@ export async function FounderMessage() {
           >
             <Image
               src={photo || "/placeholder.svg"}
-              alt="Ifagbejami Jolene Smart, Founder and Executive Director"
+              alt="Ifagbejami Jolene Smart, Founder and Chief Executive Director"
               width={600}
               height={600}
               className="w-full h-full object-cover object-[50%_15%]"
@@ -85,7 +85,7 @@ export async function FounderMessage() {
               contentKey="founder.role"
               as="p"
               label="Founder role"
-              value={resolve(c, "founder.role", "Founder and Executive Director")}
+              value={resolve(c, "founder.role", "Founder and Chief Executive Director")}
               className="text-cream/50 text-sm tracking-wider"
             />
           </div>
