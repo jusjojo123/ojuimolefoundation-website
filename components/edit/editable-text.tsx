@@ -40,7 +40,12 @@ export function EditableText({
   if (!canEdit || !editMode) {
     return createElement(
       as,
-      { className, href, style: multiline ? { whiteSpace: "pre-line" } : undefined },
+      {
+        className,
+        href,
+        // Only preserve line breaks when an admin actually entered some, so default copy renders identically to the original markup.
+        style: multiline && current.includes("\n") ? { whiteSpace: "pre-line" } : undefined,
+      },
       current,
     )
   }
