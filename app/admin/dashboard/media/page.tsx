@@ -1,6 +1,7 @@
 import { requireUser } from "@/lib/auth-helpers"
 import { listMedia } from "@/app/actions/media"
 import { MediaLibrary } from "@/components/admin/media-library"
+import { PublishingGuide } from "@/components/admin/publishing-guide"
 
 export const dynamic = "force-dynamic"
 
@@ -14,6 +15,9 @@ export default async function MediaPage() {
         <p className="text-sm text-cream/50 mt-1">
           Upload, tag, search, and reuse images, video, audio, and documents across the site.
         </p>
+      </div>
+      <div className="mb-6">
+        <PublishingGuide note="Uploading a file here stores it in your library only. It does not appear on the public website until you attach it to content and publish." />
       </div>
       <MediaLibrary
         initialItems={items}

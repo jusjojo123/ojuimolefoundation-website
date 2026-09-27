@@ -45,7 +45,7 @@ export function ContentDetail({ item, shareUrl }: { item: Content; shareUrl: str
       {/* Primary media */}
       {fields?.videoUrl && item.videoUrl && (
         <div className="mt-8">
-          <VideoEmbed url={item.videoUrl} title={item.title} />
+          <VideoEmbed url={item.videoUrl} title={item.title} poster={item.coverImage} />
         </div>
       )}
 

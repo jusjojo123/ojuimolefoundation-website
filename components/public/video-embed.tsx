@@ -1,5 +1,5 @@
 /** Renders a YouTube/Vimeo embed, or a native <video> for uploaded files. */
-export function VideoEmbed({ url, title }: { url: string; title?: string }) {
+export function VideoEmbed({ url, title, poster }: { url: string; title?: string; poster?: string | null }) {
   if (!url) return null
 
   const yt = url.match(
@@ -35,7 +35,7 @@ export function VideoEmbed({ url, title }: { url: string; title?: string }) {
   }
 
   return (
-    <video controls src={url} className="w-full rounded-lg border border-gold/15" preload="metadata">
+    <video controls playsInline src={url} poster={poster ?? undefined} className="w-full rounded-lg border border-gold/15" preload="metadata">
       Your browser does not support the video tag.
     </video>
   )

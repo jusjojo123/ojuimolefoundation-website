@@ -170,7 +170,7 @@ export function ContentEditor({ initial, defaultType, canPublish = true }: Props
         <div className="flex flex-col gap-1 pt-2 border-t border-border">
           <h2 className="text-sm font-medium tracking-wide text-gold/80">Media</h2>
           <p className="text-xs text-cream/40">
-            Upload a file or paste a link. A preview appears below so you can check it before publishing.
+            Upload a new file, choose one you already uploaded from the Media Library, or paste a link. A preview appears so you can check it before publishing.
           </p>
         </div>
       )}
