@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Cinzel, Cormorant_Garamond } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { Suspense } from "react";
+import { AnalyticsTracker } from "@/components/analytics-tracker";
 import "./globals.css";
 
 const cinzel = Cinzel({
@@ -130,6 +132,9 @@ export default function RootLayout({
           }}
         />
         {children}
+        <Suspense fallback={null}>
+          <AnalyticsTracker />
+        </Suspense>
       </body>
       {gaId ? <GoogleAnalytics gaId={gaId} /> : null}
     </html>

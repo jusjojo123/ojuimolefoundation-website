@@ -2,13 +2,22 @@
 
 import { useRouter } from "next/navigation"
 import { useState, useTransition } from "react"
-import { createUser, deleteUser, updateUserRole } from "@/app/actions/users"
+import {
+  createUser,
+  deleteUser,
+  updateUserRole,
+  updateUserPermissions,
+  setUserActive,
+} from "@/app/actions/users"
 
 type UserRow = {
   id: string
   name: string
   email: string
   role: string
+  canPublish: boolean
+  canDelete: boolean
+  isActive: boolean
   createdAt: Date | string
 }
 
@@ -71,14 +80,21 @@ export function UserManager({ users, currentUserId }: { users: UserRow[]; curren
         <h2 className="font-heading text-xl text-cream mb-2">Team Members</h2>
         {users.map((u) => {
           const isSelf = u.id === currentUserId
+          const isAdmin = u.role === "admin"
           return (
             <div
               key={u.id}
-              className="flex flex-col sm:flex-row sm:items-center gap-3 rounded-lg bg-card border border-border px-4 py-3"
+              className="flex flex-col gap-3 rounded-lg bg-card border border-border px-4 py-3"
             >
+              <div className="flex flex-col sm:flex-row sm:items-center gap-3">
               <div className="flex-1 min-w-0">
                 <p className="text-cream truncate">
                   {u.name} {isSelf && <span className="text-xs text-gold/60">(you)</span>}
+                  {!u.isActive && (
+                    <span className="ml-2 rounded-full bg-red-500/15 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-red-400">
+                      Deactivated
+                    </span>
+                  )}
                 </p>
                 <p className="text-xs text-cream/40 truncate">{u.email}</p>
               </div>
@@ -99,6 +115,21 @@ export function UserManager({ users, currentUserId }: { users: UserRow[]; curren
                 </select>
                 {!isSelf && (
                   <button
+                    onClick={() =>
+                      startTransition(async () => {
+                        const res = await setUserActive(u.id, !u.isActive)
+                        if (!res.ok) alert(res.error)
+                        refresh()
+                      })
+                    }
+                    disabled={isPending}
+                    className="text-sm text-cream/70 hover:text-gold transition-colors disabled:opacity-50"
+                  >
+                    {u.isActive ? "Deactivate" : "Activate"}
+                  </button>
+                )}
+                {!isSelf && (
+                  <button
                     onClick={() => {
                       if (confirm(`Remove ${u.name}?`)) {
                         startTransition(async () => {
@@ -115,6 +146,46 @@ export function UserManager({ users, currentUserId }: { users: UserRow[]; curren
                   </button>
                 )}
               </div>
+              </div>
+
+              {/* Per-editor permissions (admins always have full rights) */}
+              {!isAdmin && (
+                <div className="flex flex-wrap items-center gap-4 border-t border-border pt-3">
+                  <span className="text-xs uppercase tracking-wider text-cream/40">
+                    Editor permissions
+                  </span>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={u.canPublish}
+                      disabled={isPending}
+                      onChange={(e) =>
+                        startTransition(async () => {
+                          await updateUserPermissions(u.id, { canPublish: e.target.checked })
+                          refresh()
+                        })
+                      }
+                      className="h-4 w-4 accent-[#c9a227]"
+                    />
+                    <span className="text-sm text-cream/80">Can publish / unpublish / archive</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={u.canDelete}
+                      disabled={isPending}
+                      onChange={(e) =>
+                        startTransition(async () => {
+                          await updateUserPermissions(u.id, { canDelete: e.target.checked })
+                          refresh()
+                        })
+                      }
+                      className="h-4 w-4 accent-[#c9a227]"
+                    />
+                    <span className="text-sm text-cream/80">Can delete</span>
+                  </label>
+                </div>
+              )}
             </div>
           )
         })}

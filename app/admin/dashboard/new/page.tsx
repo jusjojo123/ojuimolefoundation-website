@@ -1,5 +1,6 @@
 import { requireUser } from "@/lib/auth-helpers"
 import { ContentEditor } from "@/components/admin/content-editor"
+import { PublishingGuide } from "@/components/admin/publishing-guide"
 import type { ContentType } from "@/lib/content-config"
 
 export default async function NewContentPage({
@@ -7,7 +8,7 @@ export default async function NewContentPage({
 }: {
   searchParams: Promise<{ type?: string }>
 }) {
-  await requireUser()
+  const user = await requireUser()
   const sp = await searchParams
 
   return (
@@ -18,7 +19,8 @@ export default async function NewContentPage({
           Fill in the details, then save as a draft or publish immediately.
         </p>
       </div>
-      <ContentEditor defaultType={(sp.type as ContentType) ?? undefined} />
+      <PublishingGuide />
+      <ContentEditor defaultType={(sp.type as ContentType) ?? undefined} canPublish={user.canPublish} />
     </div>
   )
 }
