@@ -42,7 +42,7 @@ const statements = [
 const leadership = [
   {
     name: "Ifagbejami Jolene Smart",
-    role: "Founder and Executive Director",
+    role: "Founder and Chief Executive Director",
     description:
       "Leads the overall vision and direction of Ojú Imọ̀lẹ̀ Media Foundation. Oversees media production, storytelling, and cultural documentation, ensuring the foundation remains aligned with its mission of illuminating culture and empowering communities.",
     image: "/images/jolene-smart-leadership.jpg",
