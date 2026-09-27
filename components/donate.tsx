@@ -98,6 +98,7 @@ export async function Donate() {
             <EditableText
               contentKey="donate.buttonLabel"
               as="span"
+              bare
               label="Button label"
               value={resolve(c, "donate.buttonLabel", "Donate Now")}
             />

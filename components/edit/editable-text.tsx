@@ -19,6 +19,7 @@ export function EditableText({
   multiline = false,
   label = "Edit text",
   href,
+  bare = false,
 }: {
   contentKey: string
   value: string
@@ -27,6 +28,7 @@ export function EditableText({
   multiline?: boolean
   label?: string
   href?: string
+  bare?: boolean
 }) {
   const { canEdit, editMode } = useEdit()
   const router = useRouter()
@@ -38,6 +40,8 @@ export function EditableText({
 
   // Public visitors (and edit mode off) get clean, non-interactive markup.
   if (!canEdit || !editMode) {
+    // `bare` renders plain text for spots where the original markup had no wrapper element.
+    if (bare) return <>{current}</>
     return createElement(
       as,
       {
