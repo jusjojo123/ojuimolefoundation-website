@@ -44,7 +44,7 @@ export async function About() {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Image */}
           <div className="relative order-2 lg:order-1">
-            <EditableImage contentKey="about.image" className="relative aspect-[4/3] rounded overflow-hidden block">
+            <EditableImage contentKey="about.image" className="relative aspect-[4/3] rounded overflow-hidden">
               <Image
                 src={img || "/placeholder.svg"}
                 alt="Cultural preservation and heritage documentation"

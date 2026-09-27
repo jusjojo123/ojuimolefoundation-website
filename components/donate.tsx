@@ -108,9 +108,10 @@ export async function Donate() {
             For donation inquiries, contact us at{" "}
             <EditableText
               contentKey="donate.email"
-              as="span"
+              as="a"
+              href={`mailto:${donateEmail}`}
               label="Donation email"
-              className="text-gold/70"
+              className="text-gold/70 hover:text-gold transition-colors"
               value={donateEmail}
             />
           </p>

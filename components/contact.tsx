@@ -114,8 +114,9 @@ export async function Contact() {
                       <EditableText
                         contentKey={`contact.${item.key}`}
                         as={item.href ? "a" : "span"}
+                        href={item.href ? item.href(value) : undefined}
                         label={`${item.label} value`}
-                        className="text-cream/60"
+                        className={item.href ? "text-cream/60 hover:text-gold transition-colors" : "text-cream/60"}
                         value={value}
                       />
                     </div>

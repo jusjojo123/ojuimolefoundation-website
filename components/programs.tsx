@@ -51,7 +51,7 @@ export async function Programs() {
               className="group relative rounded overflow-hidden bg-card border border-gold/10 hover:border-gold/20 transition-all duration-500"
             >
               {/* Image */}
-              <EditableImage contentKey={`${program.key}.image`} className="relative h-64 overflow-hidden block">
+              <EditableImage contentKey={`${program.key}.image`} className="relative h-64 overflow-hidden">
                 <Image
                   src={resolve(c, `${program.key}.image`, program.image) || "/placeholder.svg"}
                   alt={resolve(c, `${program.key}.title`, program.title)}
@@ -90,7 +90,7 @@ export async function Programs() {
             as="h3"
             label="Events heading"
             value={resolve(c, "programs.eventsHeading", "Events and Community Programs")}
-            className="font-heading text-2xl lg:text-3xl text-cream mb-6 tracking-wide block"
+            className="font-heading text-2xl lg:text-3xl text-cream mb-6 tracking-wide"
           />
           <EditableText
             contentKey="programs.eventsText"

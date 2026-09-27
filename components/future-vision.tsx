@@ -84,7 +84,7 @@ export async function FutureVision() {
                 contentKey={`future.goal.${goal.key}.title`}
                 as="h3"
                 label="Goal title"
-                className="font-heading text-xl text-gold mb-3 tracking-wide block"
+                className="font-heading text-xl text-gold mb-3 tracking-wide"
                 value={resolve(c, `future.goal.${goal.key}.title`, goal.title)}
               />
               <EditableText

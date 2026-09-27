@@ -29,7 +29,7 @@ export function EditableImage({
   const [pending, startTransition] = useTransition()
 
   if (!canEdit || !editMode) {
-    return <>{children}</>
+    return className ? <div className={className}>{children}</div> : <>{children}</>
   }
 
   function choose(url: string) {

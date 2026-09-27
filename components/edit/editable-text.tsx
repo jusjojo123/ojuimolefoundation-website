@@ -18,6 +18,7 @@ export function EditableText({
   className,
   multiline = false,
   label = "Edit text",
+  href,
 }: {
   contentKey: string
   value: string
@@ -25,6 +26,7 @@ export function EditableText({
   className?: string
   multiline?: boolean
   label?: string
+  href?: string
 }) {
   const { canEdit, editMode } = useEdit()
   const router = useRouter()
@@ -38,7 +40,7 @@ export function EditableText({
   if (!canEdit || !editMode) {
     return createElement(
       as,
-      { className, style: multiline ? { whiteSpace: "pre-line" } : undefined },
+      { className, href, style: multiline ? { whiteSpace: "pre-line" } : undefined },
       current,
     )
   }

@@ -1,21 +1,20 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_SC, Cormorant_Garamond } from "next/font/google";
+import { Cinzel, Cormorant_Garamond } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Suspense } from "react";
 import { AnalyticsTracker } from "@/components/analytics-tracker";
 import "./globals.css";
 
-const cinzel = Cormorant_SC({
+const cinzel = Cinzel({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-heading-src",
+  variable: "--font-heading",
   display: "swap",
 });
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-body-src",
+  variable: "--font-sans",
   display: "swap",
 });
 

@@ -105,7 +105,7 @@ export async function Mission() {
             as="h3"
             label="Pillars heading"
             value={resolve(c, "mission.pillarsHeading", "Our Core Pillars")}
-            className="font-heading text-xl lg:text-2xl text-cream text-center mb-12 tracking-wide block"
+            className="font-heading text-xl lg:text-2xl text-cream text-center mb-12 tracking-wide"
           />
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {pillars.map((pillar) => (

@@ -12,7 +12,6 @@ import { Gallery } from "@/components/gallery";
 import { FutureVision } from "@/components/future-vision";
 import { Donate } from "@/components/donate";
 import { Contact } from "@/components/contact";
-import { NewsletterSignup } from "@/components/public/newsletter-signup";
 import { Footer } from "@/components/footer";
 import { EditRoot } from "@/components/edit/edit-root";
 
@@ -39,7 +38,6 @@ export default function Home() {
         <FutureVision />
         <Donate />
         <Contact />
-        <NewsletterSignup />
         <Footer />
       </main>
     </EditRoot>
